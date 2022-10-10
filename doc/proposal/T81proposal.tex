@@ -1,3 +1,5 @@
+%% Reference https://docs.google.com/document/d/e/2PACX-1vTL8p8euifAho6K6PSE_b63A1HTucl3GCyLJSvjGq7ySnncqTnFa8azPNoMpzG9Wx38p4jPzxaC3OZg/pub#h.z11rqsgxo2dh
+
 %%
 %% Commands for TeXCount
 %TC:macro \cite [option:text,text]
@@ -85,7 +87,7 @@
 %% Of note is the shared affiliation of the first two authors, and the
 %% "authornote" and "authornotemark" commands
 %% used to denote shared contribution to the research.
-\author{\normalsize Ran Tavory, Ruzvidzo Ngulube, Jonathan del Campo, Brendan Danyluik}
+\author{\normalsize Ran Tavory, Ruzvidzo Ngulube, Jonathan del Campo, Brendan Danyluik (Dropping)}
 
 % Display extended author information if we want to
 
@@ -207,7 +209,7 @@
 
 \subsection*{What are you trying to do?}
 Create an interactive UI with a graph that allows querying the activity of GitHub users
-and relations between GitHub users, in pticular, find the shortest path between two users
+and relations between GitHub users, in particular, find the shortest path between two users
 (edges are defined by co-activity on the same project),
 Similar to the Erdős number in Mathematics \cite{wiki:erdos}, rate users in terms of their
 distance from some of GitHub "celebrity" user, for example distance from Linus Torvalds
@@ -236,7 +238,7 @@ repositories and users.
 They analyze how specific repositories influence the development of the code of other repositories,
 and study how repositories rank over time.
 
-From a slightly different angel \citeauthor{collaboration-strength-metrics-github}\cite{collaboration-strength-metrics-github}
+From a slightly different angle \citeauthor{collaboration-strength-metrics-github}\cite{collaboration-strength-metrics-github}
 study the correlation between the properties that measure the strength of software social coding
 collaboration on GitHub; they several ways to measuring collaboration are presented, for example
 the Preferential Attachment (PA) which assumes that the more edges a node has (a user or a project),
@@ -294,7 +296,7 @@ It has been claimed by \citeauthor{developer-onboarding-github}\cite{developer-o
 that there is evidence for socialization as a precursor to joining a project
 and so we believe that presenting the social graph would open doors to more cooperation between users.
 
-We plan to measure that by posting references to this project on reddit, twitter, hackernews and measure their
+A way to measure is by posting references to this project on reddit, twitter, hackernews and measure their
 popularity and engagement.
 
 \subsection*{What are the risks and payoffs?}
@@ -310,7 +312,7 @@ How to properly handle such large data and provide fast enough access for an int
 Payoffs: first, community engagement. Later - perhaps a business opportunity.
 
 \subsection*{How much will it cost?}
-We will collect the data (from multiple sources), then process it (on a Spark) and
+We will collect the data (from multiple sources), then process it (possibly using Spark) and
 store it for serving in a graph database (Neo4j\cite{neo4j}).
 Serving costs include the collector process (1-2servers), the spark cluster (3 nodes or more),
 at least one Node4j server and a web server.
@@ -321,33 +323,37 @@ and for the collection we need 4 servers (for the collection period, let's say 1
 we roughly have $\$0.4 \times 24 \times (2 \times 60 + 4 \times 30) = \$2304$.
 This is not cheap and we will look for ways to get funding and reduce costs.
 
+A cheaper alternative is by not using Spark and instead use a single server for processing, Neo4J and serving, this
+will cost between \$300-600 for 60 days, depending on hardware.
 
 \subsection*{How long will it take?}
 We think data collection and processing can complete within one month and writing the interface on top of it will take another month
 but these can be parallelized.
+
+Table~\ref{tab:pow} summarizes the plan of work
+
+\begin{table*}
+  \caption{Plan of Work}
+  \label{tab:pow}
+  \begin{tabular}{cccl}
+    \toprule
+    Work item               & Who                         & Start   &  Duratrion\\
+    \midrule
+    Raw Data Collection     & Jonathan del Campo and rest & Nov 1   & 4 weeks \\
+    Data Augmentation       & Ruzvidzo Ngulube            & Nov 7   & 3 weeks \\
+    Web and UI              & Ran Tavory                  & Nov 1   & 4 weeks\\
+  \bottomrule
+\end{tabular}
+\end{table*}
 
 If we have more time then another interesting aspect of the data we process is a
 Sentiment Analysis of Developers' Comments on GitHub, as suggested by \citeauthor{sentiment-analysis}\cite{sentiment-analysis}.
 We could enhance our network analysis with an aggregation of the sentiment of the comments.
 
 \subsection*{What are the midterm and final checks for success and how will progress be measured?}
-Table~\ref{tab:pow} summarizes the plan of work and checks
-
-\begin{table*}
-  \caption{Plan of Work}
-  \label{tab:pow}
-  \begin{tabular}{ccl}
-    \toprule
-    Work item               & Who                 & Checks\\
-    \midrule
-    Raw Data Collection     & Ran Tavory          & After 2 weeks a skin version, complete by 4 weeks \\
-    Data Augmentation       & Ruzvidzo Ngulube    & After 1 week works on stub data, complete by 4 weeks\\
-    UI Query and web server & Brendan Danyluik    & After 2 week works on stub data, complete by 4 weeks\\
-    UI Presentation         & Jonathan del Campo  & After 2 week works on stub data, complete by 4 weeks\\
-  \bottomrule
-\end{tabular}
-\end{table*}
-
+The riskiest part of the project is the data collection and processing and so we plan to handle it first and all team will work on that.
+Then it would be correct and interactive visualization.
+And finally and internal usability study and testing.
 
 
 % \section{Template Overview}
