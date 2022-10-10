@@ -1,26 +1,4 @@
 %%
-%% This is file `sample-sigconf.tex',
-%% generated with the docstrip utility.
-%%
-%% The original source files were:
-%%
-%% samples.dtx  (with options: `sigconf')
-%%
-%% IMPORTANT NOTICE:
-%%
-%% For the copyright see the source file.
-%%
-%% Any modified versions of this file must be renamed
-%% with new filenames distinct from sample-sigconf.tex.
-%%
-%% For distribution of the original source see the terms
-%% for copying and modification in the file samples.dtx.
-%%
-%% This generated file may be distributed as long as the
-%% original source files, as listed above, are part of the
-%% same distribution. (The sources need not necessarily be
-%% in the same archive or directory.)
-%%
 %% Commands for TeXCount
 %TC:macro \cite [option:text,text]
 %TC:macro \citep [option:text,text]
@@ -32,30 +10,11 @@
 %TC:envir math 0 word
 %TC:envir comment 0 0
 %%
-%%
-%% The first command in your LaTeX source must be the \documentclass command.
 \documentclass[sigconf,11pt]{acmart}
 
 \settopmatter{printacmref=false}
 \renewcommand\footnotetextcopyrightpermission[1]{}
 
-
-
-%% NOTE that a single column version is required for
-%% submission and peer review. This can be done by changing
-%% the \doucmentclass[...]{acmart} in this template to
-%% \documentclass[manuscript,screen]{acmart}
-%%
-%% To ensure 100% compatibility, please check the white list of
-%% approved LaTeX packages to be used with the Master Article Template at
-%% https://www.acm.org/publications/taps/whitelist-of-latex-packages
-%% before creating your document. The white list page provides
-%% information on how to submit additional LaTeX packages for
-%% review and adoption.
-%% Fonts used in the template cannot be substituted; margin
-%% adjustments are not allowed.
-
-%%
 %% \BibTeX command to typeset BibTeX logo in the docs
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
@@ -66,31 +25,25 @@
 %% values in them; it is your responsibility as an author to replace
 %% the commands and values with those provided to you when you
 %% complete the rights form.
-\setcopyright{none}
-\copyrightyear{}
-\acmYear{}
-\acmDOI{}
+% \setcopyright{none}
+% \copyrightyear{}
+% \acmYear{}
+% \acmDOI{}
 
 %% These commands are for a PROCEEDINGS abstract or paper.
-\acmConference[CSE6242]{Make sure to enter the correct
-  conference title from your rights confirmation emai}{Sept 01,
-  2022}{Atlanta, GA}
+% \acmConference[CSE6242]{Make sure to enter the correct
+%   conference title from your rights confirmation emai}{Sept 01,
+%   2022}{Atlanta, GA}
 %
 %  Uncomment \acmBooktitle if th title of the proceedings is different
 %  from ``Proceedings of ...''!
 %
 %\acmBooktitle{Woodstock '18: ACM Symposium on Neural Gaze Detection,
 %  June 03--05, 2018, Woodstock, NY}
-\acmPrice{}
-\acmISBN{}
+% \acmPrice{}
+% \acmISBN{}
 
 
-%%
-%% Submission ID.
-%% Use this when submitting an article to a sponsored event. You'll
-%% receive a unique submission ID from the organizers
-%% of the event, and this ID should be used as the parameter to this command.
-%%\acmSubmissionID{123-A56-BU3}
 
 %%
 %% For managing citations, it is recommended to use bibliography
@@ -124,7 +77,7 @@
 %%
 %% The "title" command has an optional parameter,
 %% allowing the author to define a "short title" to be used in page headers.
-\title{\Large Project Title}
+\title{\Large Analyzing the Implicit Social Network from GitHub Activities}
 
 %%
 %% The "author" command and its associated commands are used to define
@@ -132,8 +85,18 @@
 %% Of note is the shared affiliation of the first two authors, and the
 %% "authornote" and "authornotemark" commands
 %% used to denote shared contribution to the research.
-\author{\normalsize Member1, Member2, Member3, Member4, Member5, Member6}
-% \authornote{Both authors contributed equally to this research.}
+\author{\normalsize Ran Tavory, Ruzvidzo Ngulube, Jonathan del Campo, Brendan Danyluik}
+
+% Display extended author information if we want to
+
+% \affiliation{%
+%   \institution{Georgia Institute of Technology}
+%   \city{Atlanta}
+%   \state{GA}
+%   \country{USA}
+% }
+
+% \authornote{Authors contributed equally to this research.}
 % \email{trovato@corporation.com}
 % \orcid{1234-5678-9012}
 % \author{G.K.M. Tobin}
@@ -210,58 +173,20 @@
 %% other information printed in the page headers. This command allows
 %% the author to define a more concise list
 %% of authors' names for this purpose.
-\renewcommand{\shortauthors}{Trovato and Tobin, et al.}
+% \renewcommand{\shortauthors}{Trovato and Tobin, et al.}
 
-%%
-%% The abstract is a short summary of the work to be presented in the
-%% article.
-% \begin{abstract}
-%   A clear and well-documented \LaTeX\ document is presented as an
-%   article formatted for publication by ACM in a conference proceedings
-%   or journal publication. Based on the ``acmart'' document class, this
-%   article presents and explains many of the common variations, as well
-%   as many of the formatting elements an author may use in the
-%   preparation of the documentation of their work.
-% \end{abstract}
+\begin{abstract}
+  We develop a method of mining GitHub event activity to construct an implicit social network
+  between GitHub users encompassing their GitHub repositories and the connections between them.
+  We then utilize this network for interesting visualizations, including shortest path between users
+  and finding the most influential users.
+\end{abstract}
 
-%%
-%% The code below is generated by the tool at http://dl.acm.org/ccs.cfm.
-%% Please copy and paste the code instead of the example below.
-%%
-% \begin{CCSXML}
-% <ccs2012>
-%  <concept>
-%   <concept_id>10010520.10010553.10010562</concept_id>
-%   <concept_desc>Computer systems organization~Embedded systems</concept_desc>
-%   <concept_significance>500</concept_significance>
-%  </concept>
-%  <concept>
-%   <concept_id>10010520.10010575.10010755</concept_id>
-%   <concept_desc>Computer systems organization~Redundancy</concept_desc>
-%   <concept_significance>300</concept_significance>
-%  </concept>
-%  <concept>
-%   <concept_id>10010520.10010553.10010554</concept_id>
-%   <concept_desc>Computer systems organization~Robotics</concept_desc>
-%   <concept_significance>100</concept_significance>
-%  </concept>
-%  <concept>
-%   <concept_id>10003033.10003083.10003095</concept_id>
-%   <concept_desc>Networks~Network reliability</concept_desc>
-%   <concept_significance>100</concept_significance>
-%  </concept>
-% </ccs2012>
-% \end{CCSXML}
-
-% \ccsdesc[500]{Computer systems organization~Embedded systems}
-% \ccsdesc[300]{Computer systems organization~Redundancy}
-% \ccsdesc{Computer systems organization~Robotics}
-% \ccsdesc[100]{Networks~Network reliability}
 
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{}
+% \keywords{GitHub, Social Network, Visualization}
 
 %% A "teaser" image appears between the author and affiliation
 %% information and the body of the document, and typically spans the
@@ -280,29 +205,148 @@
 \maketitle
 \pagestyle{plain}
 
-\section{Introduction}
-% TODO
-\section{Heilmeier questions}
+\subsection*{What are you trying to do?}
+Create an interactive UI with a graph that allows querying the activity of GitHub users
+and relations between GitHub users, in pticular, find the shortest path between two users
+(edges are defined by co-activity on the same project),
+Similar to the Erdős number in Mathematics \cite{wiki:erdos}, rate users in terms of their
+distance from some of GitHub "celebrity" user, for example distance from Linus Torvalds
+and Find the most influential users for a certain technology scope, e.g. D3.
 
-\subsection{What are you trying to do?}
-Articulate your objectives using absolutely no jargon. \cite{Cohen07}
+Extracting implicit social graph structure has been suggested before,
+for example \citeauthor{coding-together} \cite{coding-together} create a followers and contributors graphs
+to calculate statistical measures such as the rich club coefficient \cite{wiki:rich-club-coefficient}.
+\citeauthor{network-structure-social-coding}\cite{network-structure-social-coding} take a similar approach
+of mining GitHub's event history to build a graph and compute statistics for this graph, such as
+graph's connectivity, average shortest path and PageRank\cite{pagerank}
 
-\subsection{How is it done today; what are the limits of current practice?}
+Identifying influential users or opinion leaders has its roots in sociology and in recent years has been
+implemented in different internet systems using, one interesting comparison
+between some of the methods is the focus of \citeauthor{identifying-top-n} in \cite{identifying-top-n}
+where China's social network "Sina" and a local cluster of 4k students in Shanghai University are used
+to compare the accuracy of three different opinion leaders discovery methods,
+PageRank, HITS\cite{hits} and Synthesized Centrality (invented by the authors).
+% The authors find that SC results in similar recall to PR and HITS but has higher precision.
+% This is interesting to our work although the computational costs of SC is higher from other methods and we
+% suspect that at our scale this may present challenges.
 
-\subsection{What's new in your approach? Why will it be successful?}
+\citeauthor{influence-analysis-of-github-repositories}\cite{influence-analysis-of-github-repositories}
+Through the usage of HITS generate graphs that shows the influence and relationship between GitHub
+repositories and users.
+They analyze how specific repositories influence the development of the code of other repositories,
+and study how repositories rank over time.
 
-\subsection{Who cares?}
+From a slightly different angel \citeauthor{collaboration-strength-metrics-github}\cite{collaboration-strength-metrics-github}
+study the correlation between the properties that measure the strength of software social coding
+collaboration on GitHub; they several ways to measuring collaboration are presented, for example
+the Preferential Attachment (PA) which assumes that the more edges a node has (a user or a project),
+the more likely it will get more edges.
 
-\subsection{If you're successful, what difference and impact will it make, and how do you measure them}
-(e.g., via user studies, experiments, ground truth data, etc.)?
+\citeauthor{user-influence-analysis-github}\cite{user-influence-analysis-github} focus on a very specific
+workflow of GitHub, namely the Follow-Star-Fork workflow and construct a graph based on these activities.
+They implement several quantitative measures, specifically UserRank (like PageRank), HITS, H-index\cite{wiki:h-index},
+Betweenness centrality\cite{betweenness}, Spearman rank correlation\cite{wiki:spearman},
+and Borda Count voting\cite{wiki:borda} to measure the influence of a user.
 
-\subsection{What are the risks and payoffs?}
+\citeauthor{measuring-user-influence-github}\cite{measuring-user-influence-github} measure the influence
+of GitHub users and specifically define and quantify what does influence mean in GitHub and whether the measured
+influence remains siloed to specific domain of content (e.g. technology or programming language).
 
-\subsection{How much will it cost?}
+\citeauthor{influence-github-stackoverflow}\cite{influence-github-stackoverflow} combine two software development
+focused websites, GitHub and StackOverflow, to study the influence and contribution across these two networks.
+After studying the characteristics of each separate network a combination of the networks is studied
+as the correlation between the same user's activity in one network to the other.
 
-\subsection{How long will it take?}
+\citeauthor{identifying-influences-in-the-internet-era}\cite{identifying-influences-in-the-internet-era} research
+Twitter to conduct Social Network Analysis (SNA) and identify Social Media Influencers (SMIs).
+They reveal the existence of three different SMI typologies: disseminator, engager and leader.
+Even though this study is conducted on Twitter, perhaps some of its methodology can be applied to GitHub.
 
-\subsection{What are the midterm and final "exams" to check for success? How will progress be measured?}
+\subsection*{How is it done today; what are the limits of current practice?}
+We have not seen such interactive interface for GH as of today.
+What we have seen is statistical analysis of GitHub's graph data (\cite{coding-together},
+\cite{influence-analysis-of-github-repositories} and \cite{collaboration-strength-metrics-github})
+but none of the resources we have surveyed allows for interactive discovery.
+
+There are databases with raw GitHub data (\cite{ghtorrent}, \cite{gharchive} and \cite{bq-gh})
+and there is an API for GitHub's data\cite{gh-api} but again, a tool that structures this data
+in a social network structure to allow interactive discovery we did not find.
+
+We plan to create an interactive interface such as the one studied by \citeauthor{do-you-know-the-way-to-sna}\cite{do-you-know-the-way-to-sna}
+where a user usability study of the network analysis tool NodeXL is conducted and a set of guidelines of do's an don'ts is presented.
+We do not intend to use NodeXL specifically, yet user study conclusions are useful.
+
+\subsection*{What's new in your approach and why will it be successful?}
+It is a simple way to discover connection between software developers and perhaps discover software developer communities.
+This can be useful for businesses trying to reach out to certain communities and looking for thought leaders in those communities.
+It can also be useful to any GitHub user trying to assess her contributions within GitHubs' community.
+
+\subsection*{Who cares?}
+Businesses may care about community discovery for marketing purposes.
+Individuals may care about personal branding and achievements.
+
+\subsection*{What difference and impact will it make, and to measure them?}
+The project, if successful, would become a popular tool within developers and businesses
+looking to study the social graph implied by GitHub, in particular finding connections to other specific users
+and identifying communities and their thought leaders.
+
+It has been claimed by \citeauthor{developer-onboarding-github}\cite{developer-onboarding-github}
+that there is evidence for socialization as a precursor to joining a project
+and so we believe that presenting the social graph would open doors to more cooperation between users.
+
+We plan to measure that by posting references to this project on reddit, twitter, hackernews and measure their
+popularity and engagement.
+
+\subsection*{What are the risks and payoffs?}
+There are several notable risks, in particular - data may be difficult to obtain at scale.
+Although there are multiple sources, from our research we know that no single source encompasses all the aspects
+we require so we will have to merge multiple sources.
+Merging successfully is risky as well as obtaining a complete view of the data at scale.
+We've seen reports of missing data, incorrect data, inconsistent data and obfuscated data (for privacy reasons)\cite{promises-and-perils-mining-github}.
+
+Data is large so there will be scalability concerns, including collection, preprocessing and serving.
+How to properly handle such large data and provide fast enough access for an interactive user experience may be challenging.
+
+Payoffs: first, community engagement. Later - perhaps a business opportunity.
+
+\subsection*{How much will it cost?}
+We will collect the data (from multiple sources), then process it (on a Spark) and
+store it for serving in a graph database (Neo4j\cite{neo4j}).
+Serving costs include the collector process (1-2servers), the spark cluster (3 nodes or more),
+at least one Node4j server and a web server.
+On top of that, networking (ingress and egress) and some storage costs.
+Back of the envelope, let us assume each server costs 40cent per hour (EC2 \emph{m5.2xlarge}).
+Let us assume that for ongoing serving we need two servers (Neo4j and Web) for 2 months (60 days)
+and for the collection we need 4 servers (for the collection period, let's say 1 month),
+we roughly have $\$0.4 \times 24 \times (2 \times 60 + 4 \times 30) = \$2304$.
+This is not cheap and we will look for ways to get funding and reduce costs.
+
+
+\subsection*{How long will it take?}
+We think data collection and processing can complete within one month and writing the interface on top of it will take another month
+but these can be parallelized.
+
+If we have more time then another interesting aspect of the data we process is a
+Sentiment Analysis of Developers' Comments on GitHub, as suggested by \citeauthor{sentiment-analysis}\cite{sentiment-analysis}.
+We could enhance our network analysis with an aggregation of the sentiment of the comments.
+
+\subsection*{What are the midterm and final checks for success and how will progress be measured?}
+Table~\ref{tab:pow} summarizes the plan of work and checks
+
+\begin{table*}
+  \caption{Plan of Work}
+  \label{tab:pow}
+  \begin{tabular}{ccl}
+    \toprule
+    Work item               & Who                 & Checks\\
+    \midrule
+    Raw Data Collection     & Ran Tavory          & After 2 weeks a skin version, complete by 4 weeks \\
+    Data Augmentation       & Ruzvidzo Ngulube    & After 1 week works on stub data, complete by 4 weeks\\
+    UI Query and web server & Brendan Danyluik    & After 2 week works on stub data, complete by 4 weeks\\
+    UI Presentation         & Jonathan del Campo  & After 2 week works on stub data, complete by 4 weeks\\
+  \bottomrule
+\end{tabular}
+\end{table*}
 
 
 
@@ -499,8 +543,13 @@ Articulate your objectives using absolutely no jargon. \cite{Cohen07}
 %   \end{teaserfigure}
 % \end{verbatim}
 
-\section{Conclusion}
 % TODO
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
 
 \end{document}
 \endinput
