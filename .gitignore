@@ -1,1 +1,8 @@
 *.synctex.gz
+doc/**/*.aux
+doc/**/*.bbl
+doc/**/*.blg
+doc/**/*.fdb_latexmk
+doc/**/*.fls
+doc/**/*.log
+doc/**/*.out
