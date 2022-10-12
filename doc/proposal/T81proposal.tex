@@ -17,6 +17,9 @@
 \settopmatter{printacmref=false}
 \renewcommand\footnotetextcopyrightpermission[1]{}
 
+\usepackage{titlesec}
+\titleformat*{\section}{\fontsize{14}{15}\selectfont}
+
 %% \BibTeX command to typeset BibTeX logo in the docs
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
@@ -207,18 +210,18 @@
 \maketitle
 \pagestyle{plain}
 
-\subsection*{What are you trying to do?}
+\section*{What are you trying to do?}
 Create an interactive UI with a graph that allows querying the activity of GitHub users
 and relations between GitHub users, in particular, find the shortest path between two users
 (edges are defined by co-activity on the same project),
 Similar to the Erdős number in Mathematics \cite{wiki:erdos}, rate users in terms of their
 distance from some of GitHub "celebrity" user, for example distance from Linus Torvalds
-and Find the most influential users for a certain technology scope, e.g. D3.
+and find the most influential users for a certain technology scope, e.g. D3.
 
 Extracting implicit social graph structure has been suggested before,
-for example \citeauthor{coding-together} \cite{coding-together} create a followers and contributors graphs
+for example \citeauthor{coding-together} \cite{coding-together} created a followers and contributors graphs
 to calculate statistical measures such as the rich club coefficient \cite{wiki:rich-club-coefficient}.
-\citeauthor{network-structure-social-coding}\cite{network-structure-social-coding} take a similar approach
+\citeauthor{network-structure-social-coding}\cite{network-structure-social-coding} took a similar approach
 of mining GitHub's event history to build a graph and compute statistics for this graph, such as
 graph's connectivity, average shortest path and PageRank\cite{pagerank}
 
@@ -233,38 +236,38 @@ PageRank, HITS\cite{hits} and Synthesized Centrality (invented by the authors).
 % suspect that at our scale this may present challenges.
 
 \citeauthor{influence-analysis-of-github-repositories}\cite{influence-analysis-of-github-repositories}
-Through the usage of HITS generate graphs that shows the influence and relationship between GitHub
+Through the usage of HITS analyzed graphs that show the influence and relationship between GitHub
 repositories and users.
-They analyze how specific repositories influence the development of the code of other repositories,
+They studied how specific repositories influence the development of the code of other repositories,
 and study how repositories rank over time.
 
 From a slightly different angle \citeauthor{collaboration-strength-metrics-github}\cite{collaboration-strength-metrics-github}
-study the correlation between the properties that measure the strength of software social coding
-collaboration on GitHub; they several ways to measuring collaboration are presented, for example
+studied the correlation between the properties that measure the strength of software social coding
+collaboration on GitHub; Several ways to measure collaboration were presented, for example,
 the Preferential Attachment (PA) which assumes that the more edges a node has (a user or a project),
 the more likely it will get more edges.
 
-\citeauthor{user-influence-analysis-github}\cite{user-influence-analysis-github} focus on a very specific
-workflow of GitHub, namely the Follow-Star-Fork workflow and construct a graph based on these activities.
-They implement several quantitative measures, specifically UserRank (like PageRank), HITS, H-index\cite{wiki:h-index},
+\citeauthor{user-influence-analysis-github}\cite{user-influence-analysis-github} focused on a very specific
+workflow of GitHub, namely the Follow-Star-Fork workflow and constructed a graph based on these activities.
+They implemented several quantitative measures, specifically UserRank (like PageRank), HITS, H-index\cite{wiki:h-index},
 Betweenness centrality\cite{betweenness}, Spearman rank correlation\cite{wiki:spearman},
 and Borda Count voting\cite{wiki:borda} to measure the influence of a user.
 
-\citeauthor{measuring-user-influence-github}\cite{measuring-user-influence-github} measure the influence
-of GitHub users and specifically define and quantify what does influence mean in GitHub and whether the measured
+\citeauthor{measuring-user-influence-github}\cite{measuring-user-influence-github} measured the influence
+of GitHub users and specifically defined and quantified what does influence mean in GitHub and whether the measured
 influence remains siloed to specific domain of content (e.g. technology or programming language).
 
-\citeauthor{influence-github-stackoverflow}\cite{influence-github-stackoverflow} combine two software development
+\citeauthor{influence-github-stackoverflow}\cite{influence-github-stackoverflow} combined two software development
 focused websites, GitHub and StackOverflow, to study the influence and contribution across these two networks.
 After studying the characteristics of each separate network a combination of the networks is studied
 as the correlation between the same user's activity in one network to the other.
 
-\citeauthor{identifying-influences-in-the-internet-era}\cite{identifying-influences-in-the-internet-era} research
-Twitter to conduct Social Network Analysis (SNA) and identify Social Media Influencers (SMIs).
-They reveal the existence of three different SMI typologies: disseminator, engager and leader.
-Even though this study is conducted on Twitter, perhaps some of its methodology can be applied to GitHub.
+% \citeauthor{identifying-influences-in-the-internet-era}\cite{identifying-influences-in-the-internet-era} researched
+% Twitter to conduct Social Network Analysis (SNA) and identify Social Media Influencers (SMIs).
+% They revealed the existence of three different SMI typologies: disseminator, engager and leader.
+% Even though this study is conducted on Twitter, perhaps some of its methodology can be applied to GitHub.
 
-\subsection*{How is it done today; what are the limits of current practice?}
+\section*{Today's status and limitations}
 We have not seen such interactive interface for GH as of today.
 What we have seen is statistical analysis of GitHub's graph data (\cite{coding-together},
 \cite{influence-analysis-of-github-repositories} and \cite{collaboration-strength-metrics-github})
@@ -278,16 +281,16 @@ We plan to create an interactive interface such as the one studied by \citeautho
 where a user usability study of the network analysis tool NodeXL is conducted and a set of guidelines of do's an don'ts is presented.
 We do not intend to use NodeXL specifically, yet user study conclusions are useful.
 
-\subsection*{What's new in your approach and why will it be successful?}
+\section*{Novelty in your approach and why will it be successful}
 It is a simple way to discover connection between software developers and perhaps discover software developer communities.
 This can be useful for businesses trying to reach out to certain communities and looking for thought leaders in those communities.
 It can also be useful to any GitHub user trying to assess her contributions within GitHubs' community.
 
-\subsection*{Who cares?}
+\section*{Who cares?}
 Businesses may care about community discovery for marketing purposes.
 Individuals may care about personal branding and achievements.
 
-\subsection*{What difference and impact will it make, and to measure them?}
+\section*{What impact will it make, and how to measure it?}
 The project, if successful, would become a popular tool within developers and businesses
 looking to study the social graph implied by GitHub, in particular finding connections to other specific users
 and identifying communities and their thought leaders.
@@ -299,60 +302,65 @@ and so we believe that presenting the social graph would open doors to more coop
 A way to measure is by posting references to this project on reddit, twitter, hackernews and measure their
 popularity and engagement.
 
-\subsection*{What are the risks and payoffs?}
+\section*{What are the risks and payoffs?}
 There are several notable risks, in particular - data may be difficult to obtain at scale.
 Although there are multiple sources, from our research we know that no single source encompasses all the aspects
 we require so we will have to merge multiple sources.
 Merging successfully is risky as well as obtaining a complete view of the data at scale.
 We've seen reports of missing data, incorrect data, inconsistent data and obfuscated data (for privacy reasons)\cite{promises-and-perils-mining-github}.
 
-Data is large so there will be scalability concerns, including collection, preprocessing and serving.
+Data is large so there are scalability concerns including collection, preprocessing and serving.
 How to properly handle such large data and provide fast enough access for an interactive user experience may be challenging.
 
 Payoffs: first, community engagement. Later - perhaps a business opportunity.
 
-\subsection*{How much will it cost?}
-We will collect the data (from multiple sources), then process it (possibly using Spark) and
+\section*{How much will it cost?}
+We will collect the data, process it (possibly on Spark) and
 store it for serving in a graph database (Neo4j\cite{neo4j}).
-Serving costs include the collector process (1-2servers), the spark cluster (3 nodes or more),
-at least one Node4j server and a web server.
-On top of that, networking (ingress and egress) and some storage costs.
-Back of the envelope, let us assume each server costs 40cent per hour (EC2 \emph{m5.2xlarge}).
-Let us assume that for ongoing serving we need two servers (Neo4j and Web) for 2 months (60 days)
+Serving costs include the collector process (1 servers), a spark cluster (4 nodes or more),
+one Node4j server and a web server.
+Not counting networking and storage costs.
+Back of the envelope calculation, assume each server costs 40cent per hour (EC2 \emph{m5.2xlarge})
+and assume that for ongoing serving two servers are needed (Neo4j and Web) for 2 months (60 days)
 and for the collection we need 4 servers (for the collection period, let's say 1 month),
 we roughly have $\$0.4 \times 24 \times (2 \times 60 + 4 \times 30) = \$2304$.
 This is not cheap and we will look for ways to get funding and reduce costs.
 
-A cheaper alternative is by not using Spark and instead use a single server for processing, Neo4J and serving, this
-will cost between \$300-600 for 60 days, depending on hardware.
+A cheaper alternative is by not using Spark and instead use a single server for everything,
+processing, Neo4J and serving, this will cost between \$300-600 for 60 days, depending on hardware.
 
-\subsection*{How long will it take?}
-We think data collection and processing can complete within one month and writing the interface on top of it will take another month
+\section*{How long will it take?}
+Data collection and processing can complete within one month and writing the interface on top of it will take another month
 but these can be parallelized.
 
 Table~\ref{tab:pow} summarizes the plan of work
-
-\begin{table*}
-  \caption{Plan of Work}
+% TODO: If we have more space ad items here
+\begin{table}
+  \caption{Plan of Work in high level, all work will be evenly distributed}
   \label{tab:pow}
   \begin{tabular}{cccl}
     \toprule
-    Work item               & Who                         & Start   &  Duratrion\\
+    Work item               & Who                         & Start   &  Duration\\
     \midrule
-    Raw Data Collection     & Jonathan del Campo and rest & Nov 1   & 4 weeks \\
-    Data Augmentation       & Ruzvidzo Ngulube            & Nov 7   & 3 weeks \\
-    Web and UI              & Ran Tavory                  & Nov 1   & 4 weeks\\
+    Proposal document       & Ran               & Oct 8   & 3 days \\
+    Proposal presentation   & Jonathan          & Oct 10  & 2 days \\
+    Proposal video          & Ruzvidzo          & Oct 10  & 2 days \\
+    Data Collection         & Jonathan and All  & Nov 1   & 4 weeks \\
+    Data Augmentation       & Ruzvidzo          & Nov 7   & 3 weeks \\
+    Web and UI              & Ran               & Nov 1   & 4 weeks\\
+    Progress report         & All               & TBD     & 1 week \\
+    Final report            & All               & TBD     & 2 weeks \\
   \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
-If we have more time then another interesting aspect of the data we process is a
-Sentiment Analysis of Developers' Comments on GitHub, as suggested by \citeauthor{sentiment-analysis}\cite{sentiment-analysis}.
-We could enhance our network analysis with an aggregation of the sentiment of the comments.
+% If we have more time then another interesting aspect of the data we process is a
+% Sentiment Analysis of Developers' Comments on GitHub, as suggested by \citeauthor{sentiment-analysis}\cite{sentiment-analysis}.
+% We could enhance our network analysis with an aggregation of the sentiment of the comments.
 
-\subsection*{What are the midterm and final checks for success and how will progress be measured?}
-The riskiest part of the project is the data collection and processing and so we plan to handle it first and all team will work on that.
-Then it would be correct and interactive visualization.
+\section*{Final checks and progress measurement}
+The riskiest part is data collection and processing so we plan to handle it first and all team will work on that.
+Next up is the interactive UI.
 And finally and internal usability study and testing.
 
 
@@ -549,11 +557,11 @@ And finally and internal usability study and testing.
 %   \end{teaserfigure}
 % \end{verbatim}
 
-% TODO
-
 %%
 %% The next two lines define the bibliography style to be used, and
 %% the bibliography file.
+
+\pagebreak
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
 
