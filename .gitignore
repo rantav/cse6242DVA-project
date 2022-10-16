@@ -7,3 +7,4 @@ doc/**/*.fls
 doc/**/*.log
 doc/**/*.out
 .DS_Store
+node_modules
