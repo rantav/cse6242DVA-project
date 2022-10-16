@@ -2,12 +2,16 @@ import { Heading } from '@chakra-ui/react'
 import { useState } from 'react'
 import './App.css'
 
+import UserGraph from './UserGraph'
+
 function App() {
-  const [count, setCount] = useState(0)
+  // const [count, setCount] = useState(0)
+
 
   return (
     <div className="App">
       <Heading>Team 81's Github Exlorer</Heading>
+      <UserGraph />
       {/* <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
