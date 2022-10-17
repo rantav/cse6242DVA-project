@@ -16,8 +16,9 @@ cd dist
 # git init
 git checkout -B master
 git add -A
-git commit -m 'deploy'
+git commit -m 'deploy' | echo "Nothing to commit"
 
+echo "Pushing to gh-pages"
 git push -f https://github.com/rantav/cse6242DVA-project.git master:gh-pages
 
 cd -

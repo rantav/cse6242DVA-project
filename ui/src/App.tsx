@@ -10,7 +10,7 @@ function App() {
 
   return (
     <div className="App">
-      <Heading>Team 81's Github Exlorer</Heading>
+      <Heading>Team 81's Github Exlorer!</Heading>
       <UserGraph />
       {/* <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
