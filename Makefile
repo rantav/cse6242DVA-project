@@ -1,7 +1,7 @@
 ui:
 	cd ui; npm run dev
 
-ui-deoloy:
+ui-deploy:
 	cd ui; ./deploy.sh
 
 .PHONY: ui
