@@ -1,0 +1,325 @@
+%% Reference https://docs.google.com/document/d/e/2PACX-1vTL8p8euifAho6K6PSE_b63A1HTucl3GCyLJSvjGq7ySnncqTnFa8azPNoMpzG9Wx38p4jPzxaC3OZg/pub#h.z11rqsgxo2dh
+
+\documentclass[sigconf,11pt]{acmart}
+
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+
+\usepackage{titlesec}
+\titleformat*{\section}{\fontsize{14}{15}\selectfont}
+
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
+%% end of the preamble, start of the body of the document source.
+\begin{document}
+
+\title{\Large Analyzing the Implicit Social Network from GitHub Activities \\
+       \Small Progress Report \\
+       \Small Team 081}
+
+\author{\normalsize Ran Tavory, Ruzvidzo Ngulube, Jonathan del Campo}
+
+\begin{abstract}
+  We develop a method of mining GitHub event activity to construct an implicit social network
+  between GitHub users encompassing their GitHub repositories and the connections between them.
+  We then utilize this network for interesting visualizations, including shortest path between users
+  and finding the most influential users.
+\end{abstract}
+
+\maketitle
+\pagestyle{plain}
+
+
+\section*{Introduction}
+GitHub \footnote{\url{https://github.com/}} (GH) is a popular platform for hosting open source software
+projects and many developers around the world are familiar with it, many of them use it for their day to day work.
+While GH provides  excellent tools for software development, it also supports a small set of social interactions such
+as following other users, discussions and a way to collaborate.
+What is missing in our opinion is a way to analyze the social interactions between users on the platform.
+In this report we present a method of mining GH event activity to construct an implicit social graph between GH users.
+By implicit we mean that one user may not necessarily explicitly follow another user, rather they may have interacted with each other
+working on the same repository or by commenting on an issue or a Pull Request.
+We consider such interactions as co-contribution and use them to construct a social network between users.
+
+After having built this network we apply interesting visualizations to it such as finding the shortest path between users
+or finding the most influential users.
+
+A value we see in such tool is both for businesses and individuals.
+Businesses may care about community discovery for marketing purposes.
+Individuals may care about personal branding and achievements.
+
+The project, if successful, would become a popular tool within developers and businesses
+looking to study the social graph implied by GitHub, in particular finding connections to other thought leader users
+and identifying communities.
+
+To add to that, it has been claimed by \citeauthor{developer-onboarding-github} \cite{developer-onboarding-github}
+that there is evidence for socialization as a precursor to joining a project
+and so we believe that presenting the social graph would open doors to more cooperation between users.
+
+
+\section*{Problem Definition}
+% provide a precise formal problem definition, in addition to the jargon-free version (for Heilmeier question #1).
+GH users as well as business entities can benefit from analyzing the social interactions between users.
+Several use cases come to mind:
+\begin{itemize}
+  \item Finding the most influential users in specific field in order to reach out to them for advice.
+  \item Finding the shortest path between users in order to find the best way to reach out to them.
+  \item Discovering communities focused around specific topics or technology. (not in our scope)
+  \item Finding the most active organizations. (not in our scope)
+\end{itemize}
+
+GH allows social interactions such as co-contributions but does not explicitly provide them in its API\cite{gh-api} or UI.
+We therefore want to develop a tool that would allow businesses and individuals to discover these implicit social interactions.
+
+We will create an interactive UI with a graph that allows querying the activity of GitHub users
+and relations between them, in particular, find the shortest path between two users
+(where edges are defined by co-activity on the same project),
+Similar to the Erdős number in Mathematics \cite{wiki:erdos}, rate users in terms of their
+distance from some of GitHub "celebrity" user, for example distance from Linus Torvalds
+and find the most influential users for a certain technology ecosystem , e.g. Mike Bostock for D3.
+
+We have not seen such interactive interface for GH as of today.
+There are databases with raw GitHub data (\cite{ghtorrent}, \cite{gharchive} and \cite{bq-gh})
+and there is an API for GitHub's data\cite{gh-api} but again, a tool that structures this data
+in a social network structure to allow interactive discovery we did not find.
+
+A more formal definition of the problem is stated in the following:
+Given a set of documented interactions between GH users, such as commits to a project, opening a pull request,
+following a user or starring a project, construct a social network between users where the edges are defined by
+co-activity on the same project or follow/star activity; Nodes are defined as two types, a user node and a
+repository node.
+Users may directly connect to each other by following each other or indirectly by co-activity on the same project.
+Implement two graph algorithms on this graph, namely finding the shortest path between two users and finding the most influential users
+(by means of PageRank or other).
+Lastly, display the result in an interactive UI allowing the user to query the graph in order to view only the relevant sub-graph.
+
+\section*{Survey}
+Extracting implicit social graph structure from GH has been suggested before,
+for example \citeauthor{coding-together} \cite{coding-together} created a followers and contributors graphs
+to calculate statistical measures such as the rich club coefficient \cite{wiki:rich-club-coefficient}.
+\citeauthor{network-structure-social-coding} \cite{network-structure-social-coding} took a similar approach
+of mining GitHub's event history to build a graph and compute statistics for this graph, such as
+graph's connectivity, average shortest path and PageRank\cite{pagerank}
+
+Identifying influential users or opinion leaders has its roots in sociology and in recent years has been
+implemented in different internet systems.
+One interesting comparison
+between some of the methods is the focus of \citeauthor{identifying-top-n} in \cite{identifying-top-n}
+where China's social network "Sina" and a local cluster of 4k students in Shanghai University are used
+to compare the accuracy of three different opinion leaders discovery methods,
+PageRank, HITS\cite{hits} and Synthesized Centrality (invented by the authors).
+The authors find that SC results in similar recall to PR and HITS but has higher precision.
+This is interesting to our work although the computational costs of SC is higher from other methods and we
+suspect that at our scale this may present challenges.
+
+\citeauthor{influence-analysis-of-github-repositories} \cite{influence-analysis-of-github-repositories}
+through the usage of HITS analyzed graphs that show the influence and relationship between GitHub
+repositories and users.
+They studied how specific repositories influence the development of the code of other repositories,
+and study how repositories rank over time.
+
+From a slightly different angle \citeauthor{collaboration-strength-metrics-github} \cite{collaboration-strength-metrics-github}
+studied the correlation between the properties that measure the strength of software social coding
+collaboration on GitHub; Several ways to measure collaboration were presented, for example,
+the Preferential Attachment (PA) which assumes that the more edges a node has (a user or a project),
+the more likely it will get more edges.
+
+\citeauthor{user-influence-analysis-github} \cite{user-influence-analysis-github} focused on a very specific
+workflow of GitHub, namely the Follow-Star-Fork workflow and constructed a graph based on these activities.
+They implemented several quantitative measures, specifically UserRank (like PageRank), HITS, H-index\cite{wiki:h-index},
+Betweenness centrality\cite{betweenness}, Spearman rank correlation\cite{wiki:spearman},
+and Borda Count voting\cite{wiki:borda} to measure the influence of a user.
+
+\citeauthor{measuring-user-influence-github} \cite{measuring-user-influence-github} measured the influence
+of GitHub users and specifically defined and quantified what does influence mean in GitHub and whether the measured
+influence remains siloed to specific domain of content (e.g. technology or programming language).
+
+\citeauthor{influence-github-stackoverflow} \cite{influence-github-stackoverflow} combined two software development
+focused websites, GitHub and StackOverflow, to study the influence and contribution across these two networks.
+After studying the characteristics of each separate network a combination of the networks is studied
+as the correlation between the same user's activity in one network to the other.
+
+% \citeauthor{identifying-influences-in-the-internet-era}\cite{identifying-influences-in-the-internet-era} researched
+% Twitter to conduct Social Network Analysis (SNA) and identify Social Media Influencers (SMIs).
+% They revealed the existence of three different SMI typologies: disseminator, engager and leader.
+% Even though this study is conducted on Twitter, perhaps some of its methodology can be applied to GitHub.
+
+We have not seen such interactive interface for GH as we are planning to implement as of today.
+What we have seen is statistical analysis of GitHub's graph data (\cite{coding-together},
+\cite{influence-analysis-of-github-repositories} and \cite{collaboration-strength-metrics-github})
+but none of the resources we have surveyed allows for interactive discovery.
+
+There are databases with raw GitHub data (\cite{ghtorrent}, \cite{gharchive} and \cite{bq-gh})
+and there is an API for GitHub's data\cite{gh-api} but again, a tool that structures this data
+in a social graph structure to allow interactive discovery we did not find.
+
+Interactive interfaces such as the one we plan to implement have been studies,
+for example \citeauthor{do-you-know-the-way-to-sna} \cite{do-you-know-the-way-to-sna}
+where a user usability study of the network analysis tool NodeXL is conducted and a set of guidelines of do's an don'ts is presented.
+We do not intend to use NodeXL specifically, yet user study conclusions are useful.
+
+There are several notable risks, in particular - data may be difficult to obtain at scale.
+Although there are multiple sources, from our research we know that no single source encompasses all the aspects
+we require so we will have to merge multiple sources.
+Merging successfully is risky as well as obtaining a complete view of the data at scale.
+We've seen reports of missing data, incorrect data, inconsistent data and obfuscated data
+(for privacy reasons)\cite{promises-and-perils-mining-github}.
+
+\section*{Proposed Method}
+% [70%] Detailed description of proposed method (should be almost finished)
+% Provide a clear list of innovations: give a list of the best 2-4 ideas that your approach exhibits.
+% [25%] Detailed description of the design of upcoming experiments / evaluation
+
+There are three main phased to this project, data collection, data processing and data visualization.
+
+We have identified multiple sources of data from which we may collect our data and and we are currently
+in the process of collecting data and evaluating them.
+
+The data sources we are considering are:
+\begin{itemize}
+    \item GitHub's API \cite{gh-api} provides per user information (such as number of followers, number of repositories, avatar)
+    \item GitHub's Archive \cite{gharchive} provides a drop of the data easily processed (however missing some required details).
+    \item Google BigQuery \cite{bq-gh} provides a high level query capability atop that data.
+    \item GHTorrent \cite{ghtorrent} another aggregation of GitHub's data, perhaps in a more complete form.
+    \item ClickHouse query interface for GH data \cite{ghe.clickhouse.tech} another aggregation of GH data with fast response time in a web UI.
+\end{itemize}
+
+After collecting the data there would be some preprocessing to be done, for example, we would like to go over all user
+activity and extract the interaction details to progressively build the social graph.
+For each activity we note the user that performed the activity, the repository performed on and other users if
+they were involved.
+For example opening a pull request activity would note the opener user, the name the the repository and the users
+assigned to review if there are any.
+
+Data is large so there are scalability concerns including collection, preprocessing and serving.
+How to properly handle such large data and provide fast enough access for an interactive user experience may be challenging.
+
+After this initial data collection and aggregation we would insert the data into a graph database such as Neo4j\cite{neo4j}
+in order to be able to query for shortest path.
+We might also pre-compute the PageRank\cite{pagerank} or HITS\cite{hits} for each user.
+
+Lastly we create an interactive UI that allows querying the stored data and presenting a visual representation of the implicit
+network (sub-graphs of it per the query), for example displaying the shortest path between two users and perhaps coloring
+them by their PageRank or HITS score.
+
+Our list of innovations is as follows:
+
+\begin{itemize}
+    \item We are the first, to the best of our knowledge, to collect and build GH social graph data and present it in an interactive UI.
+    \item We are the first, to the best of our knowledge, to present a shortest path between two users in a GH's implicit social graph.
+    \item We are the first, to the best of our knowledge, to calculate and present central users of GH
+      encompassing multiple social activity types (commits and pull requests), not just the Follow-Star-Fork flow.
+\end{itemize}
+
+\colorbox{green!30}{TODO: Detailed description of the design}
+
+\colorbox{green!30}{of upcoming experiments / evaluation}
+
+% For the final
+% [10%] Intuition — why should it be better than the state of the art?
+% [35%] Detailed description of your approaches: algorithms, user interfaces, etc.
+
+\section*{Plan of Activities}
+%  (same requirements as described in “Proposal” section above)
+% Provide the old plan and the revised plan
+% [-5% if not included] Provide a statement that summarizes the distribution of team members’ effort. The summary statement can be as simple as "all team members have contributed a similar amount of effort". Place this statement immediately after the Gantt chart (or table). If effort distribution is too uneven, we may assign higher scores to members who have contributed more.
+% Using either a Gantt chart (example) or a table, describe
+% the activities each member has done and will do; and
+% each activity’s start and end time (or start time and duration).
+% [-5% if not included] Provide a statement that summarizes the distribution of team members’ effort. The summary statement can be as simple as "all team members have contributed a similar amount of effort". Place this statement immediately after the Gantt chart (or table). If effort distribution is too uneven, we may assign higher scores to members who have contributed more.
+
+Table~\ref{tab:pow} summarizes the plan of work
+\begin{table*}
+  \caption{Plan of Work in high level}
+  \label{tab:pow}
+  \begin{tabular}{cccl}
+    \toprule
+    Work item               & Who                         & Start   &  Duration\\
+    \midrule
+    Proposal document       & Ran               & Oct 8   & 3 days \\
+    Proposal presentation   & Jonathan          & Oct 10  & 2 days \\
+    Proposal video          & Ruzvidzo          & Oct 10  & 2 days \\
+    Data Collection         & Jonathan and All  & Nov 1   & 4 weeks \\
+    Data Augmentation       & Ruzvidzo          & Nov 7   & 3 weeks \\
+    Web and UI              & Ran               & Nov 1   & 4 weeks\\
+    Progress report         & All               & Oct 30  & 1 week \\
+    Final report            & All               & Nov 20  & 2 weeks \\
+    \hline
+    \multicolumn{4}{c} *All team members contribute a similar amount of effort \\
+  \bottomrule
+\end{tabular}
+\end{table*}
+
+Our current progress is as follows:
+
+\begin{itemize}
+    \item Data collection: The analysis that has been done up to now is includes
+      feasibility analysis of different solutions to extract data from Github.
+      The one that has been selected to used to extract data is BigQuery.
+    \item Data processing: We have identified the data that it is required for the analysis through Graphs and the content of the data.
+    \item Presentation: An initial web UI is implemented using modern web technologies
+      such as React\footnote{\url{https://reactjs.org/}}, D3\footnote{\url{https://d3js.org/}},
+      Vite\footnote{\url{https://vitejs.dev/}} and TypeScript\footnote{\url{https://www.typescriptlang.org/}}.
+\end{itemize}
+
+\section*{Experiments/ Evaluation}
+% [5%] Description of your testbed; list of questions your experiments are designed to answer
+% [25%] Detailed description of the experiments; observations (as many as you can!)
+% [5%] Conclusions and discussion
+% [-5% if not included] Provide a statement that summarizes the distribution of team members’ effort. The summary statement can be as simple as "all team members have contributed a similar amount of effort". If effort distribution is too uneven, we may assign higher scores to members who have contributed more.
+
+The following steps that are going to be performed are:
+\begin{itemize}
+  \item Code to make the data extraction of commits.
+  \item Code to make the data extraction of contents.
+  \item Code to make the data extraction of files.
+  \item Code to make the data extraction of languages.
+  \item Code to make the data extraction of repositories.
+\end{itemize}
+
+The evaluation of the steps that are performed during the data collection will consist in data integrity checks between the different datasets, data comparison with other methodologies in smaller datasets as tests, and data quality check of the final solution through the UI making comparable results with other analysis done in other researches.
+
+% A way to measure is by posting references to this project on reddit, twitter, hackernews and measure their
+% popularity and engagement.
+
+% Payoffs: first, community engagement. Later - perhaps a business opportunity.
+
+% \section*{How much will it cost?}
+% We will collect the data, process it (possibly on Spark) and
+% store it for serving in a graph database (Neo4j\cite{neo4j}).
+% Serving costs include the collector process (1 servers), a spark cluster (4 nodes or more),
+% one Node4j server and a web server.
+% Not counting networking and storage costs.
+% Back of the envelope calculation, assume each server costs 40cent per hour (EC2 \emph{m5.2xlarge})
+% and assume that for ongoing serving two servers are needed (Neo4j and Web) for 2 months (60 days)
+% and for the collection we need 4 servers (for the collection period, let's say 1 month),
+% we roughly have $\$0.4 \times 24 \times (2 \times 60 + 4 \times 30) = \$2304$.
+% This is not cheap and we will look for ways to get funding and reduce costs.
+
+% A cheaper alternative is by not using Spark and instead use a single server for everything,
+% processing, Neo4J and serving, this will cost between \$300-600 for 60 days, depending on hardware.
+
+% \section*{How long will it take?}
+% Data collection and processing can complete within one month and writing the interface on top of it will take another month
+% but these can be parallelized.
+
+
+% If we have more time then another interesting aspect of the data we process is a
+% Sentiment Analysis of Developers' Comments on GitHub, as suggested by \citeauthor{sentiment-analysis}\cite{sentiment-analysis}.
+% We could enhance our network analysis with an aggregation of the sentiment of the comments.
+
+% \section*{Final checks and progress measurement}
+% The riskiest part is data collection and processing so we plan to handle it first and all team will work on that.
+% Next up is the interactive UI.
+% And finally and internal usability study and testing.
+
+
+\pagebreak
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\end{document}
+\endinput
