@@ -8,3 +8,7 @@ doc/**/*.log
 doc/**/*.out
 .DS_Store
 node_modules
+.venv/
+__pycache__
+
+.aws/config
