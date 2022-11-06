@@ -6,7 +6,7 @@ import './App.css'
 function App() {
   return (
     <div className="App">
-      <Heading>Team 81's Github Exlorer!</Heading>
+      <Heading>Team 81's Github Exlorer! 44</Heading>
       <UserGraph />
     </div>
   )
