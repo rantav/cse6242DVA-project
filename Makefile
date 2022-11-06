@@ -17,10 +17,14 @@ be-deploy:
 		export AWS_CONFIG_FILE="../../.aws/config" && \
 	  	chalice deploy
 
+be:
+	@cd be/server && \
+		source ../.venv/bin/activate && \
+		chalice local
 ui:
-	cd ui; npm run dev
+	@cd ui; npm run dev
 
 ui-deploy:
-	cd ui; ./deploy.sh
+	@cd ui; ./deploy.sh
 
-.PHONY: ui
+.PHONY: ui be
