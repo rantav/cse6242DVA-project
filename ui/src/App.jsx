@@ -17,7 +17,7 @@ function App() {
           clientId={import.meta.env.VITE_GH_CLIENT_ID}
           redirectUri={import.meta.env.VITE_GH_REDIRECT_URI}/>
 
-      <Heading>Team 81's Github Exlorer! </Heading>
+      <Heading>Team 81's Github Exlorer! 5</Heading>
       <UserGraph />
     </div>
   )
