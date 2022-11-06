@@ -1,4 +1,15 @@
+import os
 import requests
+from pydantic import BaseModel
+
+class Config(BaseModel):
+    client_id: str
+    client_secret: str
+
+
+def get_config() -> Config:
+    return Config(client_id=os.getenv('GH_CLIENT_ID'), client_secret=os.getenv('GH_CLIENT_SECRET'))
+
 
 def get_user_data(access_token: str) -> dict:
     """Obtain the user data from github.
@@ -67,7 +78,7 @@ def get_user_data(access_token: str) -> dict:
     return userData
 
 
-def get_access_token(CLIENT_ID: str, CLIENT_SECRET: str, request_token: str) -> str:
+def get_access_token(request_token: str) -> str:
     """Obtain the request token from github.
     Given the client id, client secret and request issued out by GitHub, this method
     should give back an access token
@@ -88,23 +99,16 @@ def get_access_token(CLIENT_ID: str, CLIENT_SECRET: str, request_token: str) -> 
     access_token: str
         A string representing the access token issued out by github
     """
-    if not CLIENT_ID:
-        raise ValueError('The CLIENT_ID has to be supplied!')
-    if not CLIENT_SECRET:
-        raise ValueError('The CLIENT_SECRET has to be supplied!')
+    config = get_config()
     if not request_token:
         raise ValueError('The request token has to be supplied!')
-    if not isinstance(CLIENT_ID, str):
-        raise ValueError('The CLIENT_ID has to be a string!')
-    if not isinstance(CLIENT_SECRET, str):
-        raise ValueError('The CLIENT_SECRET has to be a string!')
     if not isinstance(request_token, str):
         raise ValueError('The request token has to be a string!')
 
     url = f'https://github.com/login/oauth/access_token'
     data = {
-        'client_id': CLIENT_ID,
-        'client_secret': CLIENT_SECRET,
+        'client_id': config.client_id,
+        'client_secret': config.client_secret,
         'code': request_token
     }
     headers = {
