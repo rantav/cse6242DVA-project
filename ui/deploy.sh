@@ -8,7 +8,7 @@ currenet_branch=$(git rev-parse --abbrev-ref HEAD)
 npm run build
 
 git checkout gh-pages
-cp -r dist/* .
+cp -r dist/* ..
 
 echo "Pushing to gh-pages"
 # git push -f https://github.com/rantav/cse6242DVA-project.git master:gh-pages
