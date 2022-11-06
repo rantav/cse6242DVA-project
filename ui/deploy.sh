@@ -5,11 +5,12 @@ set -e
 currenet_branch=$(git rev-parse --abbrev-ref HEAD)
 
 # build
-git checkout gh-pages
 cd ui
 npm run build
-
 cd ..
+
+git checkout gh-pages
+
 
 cp -r ui/dist/* .
 
