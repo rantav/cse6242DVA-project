@@ -10,5 +10,4 @@ doc/**/*.out
 node_modules
 .venv/
 __pycache__
-
 .aws/config
