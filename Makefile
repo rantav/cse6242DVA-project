@@ -24,7 +24,10 @@ be:
 ui:
 	@cd ui; npm run dev
 
+ui-preview:
+	@cd ui; npm run build && npm run preview
+
 ui-deploy:
-	@cd ui; ./deploy.sh
+	ui/deploy.sh
 
 .PHONY: ui be
