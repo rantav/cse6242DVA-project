@@ -1,14 +1,10 @@
 import React from "react";
 import * as d3 from "d3";
 
-interface Props {}
 
-interface State {}
+class UserGraph extends React.Component {
 
-class UserGraph extends React.Component<Props, State> {
-  ref!: SVGSVGElement;
-
-  private buildGraph(data: Array<number>) {
+  buildGraph(data) {
     const width = 200,
     scaleFactor = 10,
     barHeight = 20;
@@ -46,7 +42,7 @@ class UserGraph extends React.Component<Props, State> {
 
   render() {
     return (<div className="svg">
-      <svg className="container" ref={(ref: SVGSVGElement) => this.ref = ref} width='100' height='100'></svg>
+      <svg className="container" ref={(ref) => this.ref = ref} width='100' height='100'></svg>
     </div>);
   }
 }
