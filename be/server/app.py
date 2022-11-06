@@ -1,11 +1,28 @@
 from chalice import Chalice
+from github import get_access_token, get_user_data
 
 app = Chalice(app_name='server')
+app.debug = True
 
 
 @app.route('/')
 def index():
-    return {'hello': 'world!!! 444'}
+    return {'hello': 'world!!!'}
+
+@app.route('/github/callback', methods=['GET'])
+def github_callback():
+    """Authenticate the user and displays their data."""
+    args = app.current_request.to_dict()
+    request_token = args.get('query_params', {}).get('code')
+
+    CLIENT_ID = '9106310b56184deea4c5' #app.config['CLIENT_ID']
+    CLIENT_SECRET = '77faf7856f666521ce59fcda18160ba31a99364b' # app.config['CLIENT_SECRET']
+    access_token = get_access_token(CLIENT_ID, CLIENT_SECRET, request_token)
+
+    user_data = get_user_data(access_token)
+    # return render_template('success.html', userData=user_data)
+    return {'status': 'success', 'data': user_data}
+
 
 
 # The view function above will return {"hello": "world"}
