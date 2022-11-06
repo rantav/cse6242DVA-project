@@ -1,5 +1,5 @@
 from chalice import Chalice
-from github import get_access_token, get_user_data
+from chalicelib.github import get_access_token, get_user_data
 
 app = Chalice(app_name='server')
 app.api.cors = True
