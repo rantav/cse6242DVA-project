@@ -6,8 +6,12 @@ currenet_branch=$(git rev-parse --abbrev-ref HEAD)
 
 # build
 git checkout gh-pages
+cd ui
 npm run build
-cp -r dist/* ..
+
+cd ..
+
+cp -r ui/dist/* .
 
 git ci -am "deploy"
 
