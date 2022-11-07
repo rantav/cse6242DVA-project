@@ -14,7 +14,9 @@
             "cwd": "${workspaceFolder}/be/server",
             "args": [
                 "local",
-                "--no-autoreload"
+                "--no-autoreload",
+                "--stage",
+                "local"
             ],
             "justMyCode": false
         },

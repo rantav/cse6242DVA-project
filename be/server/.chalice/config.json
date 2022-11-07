@@ -1,11 +1,13 @@
 {
   "version": "2.0",
   "app_name": "server",
-  "environment_variables": {
-    "GH_CLIENT_ID": "fdbe6b5a50988846f8a1",
-    "GH_CLIENT_SECRET": "14bde6057f8c20fc5bee9525c45531292defb906"
-  },
   "stages": {
+    "local": {
+      "environment_variables": {
+        "GH_CLIENT_ID": "9106310b56184deea4c5",
+        "GH_CLIENT_SECRET": "2aef37849a4c29edf4821a86c7595d2d8163e932"
+      }
+    },
     "dev": {
       "api_gateway_stage": "api",
       "environment_variables": {

@@ -21,12 +21,16 @@ be-deploy:
 	@cd be/server && \
 		source ../.venv/bin/activate && \
 		export AWS_CONFIG_FILE="../../.aws/config" && \
-	  	chalice deploy
+	  	chalice deploy --stage dev
+	@echo "Server URL: "
+	@cd be/server && \
+		chalice url
+
 
 be:
 	@cd be/server && \
 		source ../.venv/bin/activate && \
-		chalice local
+		chalice local --stage local
 ui:
 	@cd ui; npm run dev
 
