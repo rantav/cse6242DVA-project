@@ -9,14 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.11",
     "@chakra-ui/react": "^2.3.7",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "d3": "^7.6.1",
     "framer-motion": "^7.6.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-github-login": "^1.0.3"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.22",

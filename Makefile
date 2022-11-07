@@ -1,4 +1,9 @@
-setup: setup-be
+setup: setup-be setup-ui
+
+setup-ui:
+	@echo "Setting up the UI"
+	@cd ui; npm i
+
 
 setup-be:
 	@echo "Setting up backend environment"
@@ -8,7 +13,8 @@ setup-be:
 	@cd be && \
 		source .venv/bin/activate && \
 		pip install --upgrade pip && \
-		pip install -r requirements.txt
+		pip install -r requirements.txt && \
+		pip install -r server/requirements.txt
 
 be-deploy:
 	@echo "Deploying backend"

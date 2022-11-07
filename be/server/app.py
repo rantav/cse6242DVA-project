@@ -16,7 +16,7 @@ def github_callback():
     args = app.current_request.to_dict()
     request_token = args.get('query_params', {}).get('code')
 
-    access_token = get_access_token(request_token)
+    access_token = get_access_token(request_token, log=app.log)
 
     user_data = get_user_data(access_token)
     # return render_template('success.html', userData=user_data)

@@ -1,3 +1,4 @@
+import logging
 import os
 import requests
 from pydantic import BaseModel
@@ -78,7 +79,7 @@ def get_user_data(access_token: str) -> dict:
     return userData
 
 
-def get_access_token(request_token: str) -> str:
+def get_access_token(request_token: str, log: logging.Logger = None) -> str:
     """Obtain the request token from github.
     Given the client id, client secret and request issued out by GitHub, this method
     should give back an access token
@@ -105,11 +106,11 @@ def get_access_token(request_token: str) -> str:
     if not isinstance(request_token, str):
         raise ValueError('The request token has to be a string!')
 
-    url = f'https://github.com/login/oauth/access_token'
+    url = 'https://github.com/login/oauth/access_token'
     data = {
         'client_id': config.client_id,
         'client_secret': config.client_secret,
-        'code': request_token
+        'code': request_token,
     }
     headers = {
         'accept': 'application/json'
@@ -118,6 +119,11 @@ def get_access_token(request_token: str) -> str:
     res = requests.post(url, data=data, headers=headers)
 
     data = res.json()
+
+    if data.get('error'):
+        log.error(data)
+        raise Exception(data.get('error'))
+
     access_token = data['access_token']
 
     return access_token
