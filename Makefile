@@ -7,30 +7,27 @@ setup-ui:
 
 setup-be:
 	@echo "Setting up backend environment"
-	@cd be && \
-		rm -rf .venv && \
-		/usr/local/bin/python3.9 -m venv .venv
-	@cd be && \
-		source .venv/bin/activate && \
+	rm -rf .venv
+	python3 -m venv .venv
+	source .venv/bin/activate && \
 		pip install --upgrade pip && \
-		pip install -r requirements.txt && \
-		pip install -r server/requirements.txt
+		pip install -r requirements.txt
+# heroku apps:create  --region eu --team dva-project gh-explorer-081
 
-be-deploy:
-	@echo "Deploying backend"
-	@cd be/server && \
-		source ../.venv/bin/activate && \
-		export AWS_CONFIG_FILE="../../.aws/config" && \
-	  	chalice deploy --stage dev
-	@echo "Server URL: "
-	@cd be/server && \
-		chalice url
+
+deploy:
+	@echo "Deploying app"
+	git rm -rf ui/dist
+	@cd ui; npm run build
+	git add ui/dist/
+	git ci -m "Deploy"
+	git push heroku $$(git rev-parse --abbrev-ref HEAD):master
 
 
 be:
-	@cd be/server && \
-		source ../.venv/bin/activate && \
-		chalice local --stage local
+	@echo "Visit http://127.0.0.1:5000/_vite/"
+	source .venv/bin/activate && \
+		FLASK_DEBUG=1 flask run
 ui:
 	@cd ui; npm run dev
 
