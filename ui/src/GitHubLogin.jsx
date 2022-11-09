@@ -37,7 +37,6 @@ class GitHubLogin extends Component {
       // state: this.randomString(),
       redirect_uri: redirectUri,
     });
-    console.log(search)
     const popup = this.popup = PopupWindow.open(
       'github-oauth-authorize',
       `https://github.com/login/oauth/authorize?${search}`,
