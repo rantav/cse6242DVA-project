@@ -15,26 +15,13 @@ setup-be:
 # heroku apps:create  --region eu --team dva-project gh-explorer-081
 
 
-	# @cd be && \
-	# 	/usr/local/bin/python3.9 -m venv .venv
-	# @cd be && \
-	# 	source .venv/bin/activate && \
-	# 	pip install --upgrade pip && \
-	# 	pip install -r requirements.txt && \
-	# 	pip install -r server/requirements.txt
-
 deploy:
 	@echo "Deploying app"
+	git rm -rf ui/dist
 	@cd ui; npm run build
+	git add ui/dist/
+	git ci -m "Deploy"
 	git push heroku $$(git rev-parse --abbrev-ref HEAD):master
-
-	# @cd be/server && \
-	# 	source ../.venv/bin/activate && \
-	# 	export AWS_CONFIG_FILE="../../.aws/config" && \
-	#   	chalice deploy --stage dev
-	# @echo "Server URL: "
-	# @cd be/server && \
-	# 	chalice url
 
 
 be:
