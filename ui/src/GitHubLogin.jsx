@@ -34,7 +34,6 @@ class GitHubLogin extends Component {
     const search = toQuery({
       client_id: clientId,
       scope,
-      // state: this.randomString(),
       redirect_uri: redirectUri,
     });
     const popup = this.popup = PopupWindow.open(
@@ -49,16 +48,12 @@ class GitHubLogin extends Component {
       error => this.onFailure(error)
     );
   }
-
-  // randomString = () => {
-  //   return (Math.random() + 1).toString(36).substring(7)
-  // }
-
   onRequest = () => {
     this.props.onRequest();
   }
 
   onSuccess = (data) => {
+    console.log(data);
     if (!data.code) {
       return this.onFailure(new Error('\'code\' not found'));
     }

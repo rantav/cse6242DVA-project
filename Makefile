@@ -20,7 +20,7 @@ deploy:
 	git rm -rf ui/dist
 	@cd ui; npm run build
 	git add ui/dist/
-	git ci -m "Deploy"
+	git ci -m "Deploy" || echo ""
 	git push heroku $$(git rev-parse --abbrev-ref HEAD):master
 
 be:

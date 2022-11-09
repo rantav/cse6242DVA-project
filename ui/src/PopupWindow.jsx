@@ -42,7 +42,7 @@ class PopupWindow {
 
           resolve(params);
 
-          this.close();
+        //   this.close();
         } catch (error) {
           /*
            * Ignore DOMException: Blocked a frame with origin from accessing a

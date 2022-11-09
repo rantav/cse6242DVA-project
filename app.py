@@ -40,7 +40,8 @@ def authorized(oauth_token):
 
     # user.github_access_token = oauth_token
     # db_session.commit()
-    return redirect(next_url)
+    # return redirect(next_url)
+    return 'Thank you!'
 
 
 @app.route("/")
