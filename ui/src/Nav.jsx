@@ -88,8 +88,7 @@ export default function WithSubnavigation() {
               onSuccess={onSuccess}
               onFailure={onFailure}
               scope='user:email'
-              clientId={import.meta.env.VITE_GH_CLIENT_ID}
-              redirectUri={import.meta.env.VITE_GH_REDIRECT_URI}>
+              clientId={import.meta.env.VITE_GH_CLIENT_ID}>
               Sign in with GitHub
             </GitHubLogin>
           </Button>

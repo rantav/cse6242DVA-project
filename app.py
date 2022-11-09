@@ -1,12 +1,13 @@
 from flask import Flask, send_from_directory, url_for, redirect, flash, request, Response
 from flask_github import GitHub
 import requests
+import os
 
 app = Flask(__name__, static_url_path="/", static_folder="vite/dist")
 
 # https://github-flask.readthedocs.io/en/latest/
-app.config['GITHUB_CLIENT_ID'] = 'dd6d900fc1e3bd3033e8'
-app.config['GITHUB_CLIENT_SECRET'] = '37426b38abad2911394f7c08afefd21b6df901ce'
+app.config['GITHUB_CLIENT_ID'] = os.getenv('GITHUB_CLIENT_ID')
+app.config['GITHUB_CLIENT_SECRET'] = os.getenv('GITHUB_CLIENT_SECRET')
 github = GitHub(app)
 
 ui = 'ui/dist/'
@@ -15,6 +16,12 @@ vite_local_server = 'http://localhost:5173/_vite/'
 @app.route('/login')
 def login():
     return github.authorize()
+
+
+@app.route('/env')
+def env():
+    # return os.getenv('XXX')
+    return app.config['GITHUB_CLIENT_ID']
 
 
 

@@ -23,7 +23,6 @@ deploy:
 	git ci -m "Deploy"
 	git push heroku $$(git rev-parse --abbrev-ref HEAD):master
 
-
 be:
 	@echo "Visit http://127.0.0.1:5000/_vite/"
 	source .venv/bin/activate && \
@@ -34,7 +33,5 @@ ui:
 ui-preview:
 	@cd ui; npm run build && npm run preview
 
-ui-deploy:
-	ui/deploy.sh
 
 .PHONY: ui be
