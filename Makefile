@@ -12,7 +12,7 @@ setup-be:
 	source .venv/bin/activate && \
 		pip install --upgrade pip && \
 		pip install -r requirements.txt
-
+# heroku apps:create  --region eu --team dva-project gh-explorer-081
 
 
 	# @cd be && \
@@ -23,15 +23,18 @@ setup-be:
 	# 	pip install -r requirements.txt && \
 	# 	pip install -r server/requirements.txt
 
-be-deploy:
-	@echo "Deploying backend"
-	@cd be/server && \
-		source ../.venv/bin/activate && \
-		export AWS_CONFIG_FILE="../../.aws/config" && \
-	  	chalice deploy --stage dev
-	@echo "Server URL: "
-	@cd be/server && \
-		chalice url
+deploy:
+	@echo "Deploying app"
+	@cd ui; npm run build
+	git push heroku $$(git rev-parse --abbrev-ref HEAD):master
+
+	# @cd be/server && \
+	# 	source ../.venv/bin/activate && \
+	# 	export AWS_CONFIG_FILE="../../.aws/config" && \
+	#   	chalice deploy --stage dev
+	# @echo "Server URL: "
+	# @cd be/server && \
+	# 	chalice url
 
 
 be:

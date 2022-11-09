@@ -9,7 +9,7 @@ app.config['GITHUB_CLIENT_ID'] = 'dd6d900fc1e3bd3033e8'
 app.config['GITHUB_CLIENT_SECRET'] = '37426b38abad2911394f7c08afefd21b6df901ce'
 github = GitHub(app)
 
-ui = 'dist/'
+ui = 'ui/dist/'
 vite_local_server = 'http://localhost:5173/_vite/'
 
 @app.route('/login')
