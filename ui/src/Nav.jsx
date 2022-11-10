@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Flex,
   Text,
@@ -8,10 +9,13 @@ import {
   Collapse,
   Icon,
   Link,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   Popover,
   PopoverTrigger,
   PopoverContent,
-
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
@@ -57,6 +61,11 @@ export default function WithSubnavigation() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const logout = () => {
+    document.cookie = 'user=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    setUser(null);
   }
 
   if (Cookies.get('user') && !user) {
@@ -106,7 +115,20 @@ export default function WithSubnavigation() {
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
-          {user && <Text>{user.login}</Text>}
+          {user && <Menu>
+              <MenuButton
+                as={Button}
+                rounded={'full'}
+                variant={'link'}
+                cursor={'pointer'}
+                minW={0}>
+                <Avatar size={'sm'} src={user.avatar_url} />
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={logout}>Log out</MenuItem>
+              </MenuList>
+            </Menu>
+          }
           {!user &&
             <Button
               display={{ base: 'none', md: 'inline-flex' }}
