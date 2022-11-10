@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Flex,
   Text,
@@ -8,10 +9,13 @@ import {
   Collapse,
   Icon,
   Link,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   Popover,
   PopoverTrigger,
   PopoverContent,
-
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
@@ -22,14 +26,51 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from '@chakra-ui/icons';
+import {useState} from 'react'
+import Cookies from 'js-cookie';
 
 import GitHubLogin from './GitHubLogin.jsx';
 
-const onSuccess = response => console.log(response);
 const onFailure = response => console.error(response);
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
+  const [user, setUser] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const onLoginSuccess = (response) => getUser()
+
+  const getUser = async() => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await fetch('/user');
+
+      if (!response.ok) {
+        throw new Error(`Error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      setUser(result);
+    } catch (err) {
+      Cookies.remove('user')
+      setErr(err.message);
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const logout = () => {
+    document.cookie = 'user=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    setUser(null);
+  }
+
+  if (Cookies.get('user') && !user) {
+    getUser()
+  }
 
   return (
     <Box>
@@ -74,24 +115,40 @@ export default function WithSubnavigation() {
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
-          <Button
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'pink.400'}
-            href={'#'}
-            _hover={{
-              bg: 'pink.300',
-            }}>
-          <GitHubLogin
-              onSuccess={onSuccess}
-              onFailure={onFailure}
-              scope='user:email'
-              clientId={import.meta.env.VITE_GH_CLIENT_ID}>
-              Sign in with GitHub
-            </GitHubLogin>
-          </Button>
+          {user && <Menu>
+              <MenuButton
+                as={Button}
+                rounded={'full'}
+                variant={'link'}
+                cursor={'pointer'}
+                minW={0}>
+                <Avatar size={'sm'} src={user.avatar_url} />
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={logout}>Log out</MenuItem>
+              </MenuList>
+            </Menu>
+          }
+          {!user &&
+            <Button
+              display={{ base: 'none', md: 'inline-flex' }}
+              fontSize={'sm'}
+              fontWeight={600}
+              color={'white'}
+              bg={'pink.400'}
+              href={'#'}
+              _hover={{
+                bg: 'pink.300',
+              }}>
+              <GitHubLogin
+                onSuccess={onLoginSuccess}
+                onFailure={onFailure}
+                scope='user:email'
+                clientId={import.meta.env.VITE_GH_CLIENT_ID}>
+                Sign in with GitHub
+              </GitHubLogin>
+            </Button>
+          }
         </Stack>
       </Flex>
 

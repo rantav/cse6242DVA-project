@@ -4,13 +4,20 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
-            "name": "Python: Current File",
+            "name": "app.py",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "${workspaceFolder}/app.py",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "env": {
+                "GITHUB_CLIENT_ID": "9106310b56184deea4c5",
+                "GITHUB_CLIENT_SECRET": "2aef37849a4c29edf4821a86c7595d2d8163e932"
+
+            }
+
         }
     ]
 }
