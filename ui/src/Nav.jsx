@@ -115,7 +115,9 @@ export default function WithSubnavigation() {
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
-          {user && <Menu>
+
+          {user &&
+            <Menu>
               <MenuButton
                 as={Button}
                 rounded={'full'}
@@ -131,15 +133,8 @@ export default function WithSubnavigation() {
           }
           {!user &&
             <Button
-              display={{ base: 'none', md: 'inline-flex' }}
               fontSize={'sm'}
-              fontWeight={600}
-              color={'white'}
-              bg={'pink.400'}
-              href={'#'}
-              _hover={{
-                bg: 'pink.300',
-              }}>
+              fontWeight={600}>
               <GitHubLogin
                 onSuccess={onLoginSuccess}
                 onFailure={onFailure}
