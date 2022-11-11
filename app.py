@@ -16,10 +16,16 @@ users = Users()
 ui = 'ui/dist/'
 vite_local_server = 'http://localhost:5173/_vite/'
 
+# Query
+@app.route('/query')
+def query():
+    q = request.args.get('q')
+    return send_from_directory('data', 'mock-result.json')
+
+# Authentication
 @app.route('/login')
 def login():
     return github_flask.authorize()
-
 
 @app.route('/github-callback')
 @github_flask.authorized_handler
@@ -27,7 +33,6 @@ def authorized(oauth_token):
     code = request.args.get('code')
     if oauth_token is None:
         if code is None:
-            # flash("Authorization failed.")
             return 'Authorization failed :-('
         oauth_token = github.get_access_token(code)
     # user = User.query.filter_by(github_access_token=oauth_token).first()
@@ -46,8 +51,6 @@ def authorized(oauth_token):
 
     return resp
 
-
-
 @app.route("/user")
 def user():
     user_code = request.cookies.get('user')
@@ -58,6 +61,7 @@ def user():
         return 'No user', 401
     return user.json()
 
+# UI
 @app.route("/")
 def index():
     return send_from_directory(ui, 'index.html')
@@ -73,7 +77,6 @@ def vite(path):
 @app.route("/assets/<path:path>")
 def assets(path):
     return send_from_directory(ui + 'assets', path)
-
 
 def _proxy(path):
     url = vite_local_server + path
