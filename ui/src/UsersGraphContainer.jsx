@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import D3Component from './D3UsersGraph';
+import D3UsersGraph from './D3UsersGraph';
 
 let vis;
 
@@ -16,12 +16,22 @@ export default function UsersGraphContainer() {
   useEffect(updateVisOnResize, [ width, height ]);
 
   function fetchData() {
-    Promise.resolve().then(() => setData(['a', 'b', 'c', 'd']));
+    fetch("/query").then(response => {
+      response.json().then(data => {
+        setData(data)
+      })
+    });
   }
 
   function update() {
-    Promise.resolve().then(() => setData(['a']));
+    // fetch("/query").then(response => {
+    //   response.json().then(data => {
+        setData(data)
+    //   })
+    // });
+    // Promise.resolve().then(() => setData(data));
   }
+
   function handleResizeEvent() {
     let resizeTimer;
     const handleResize = () => {
@@ -39,14 +49,14 @@ export default function UsersGraphContainer() {
   }
 
   function initVis() {
-    if(data && data.length) {
+    if(data) {
       const d3Props = {
         data,
         width,
         height,
         onDatapointClick: setActive
       };
-      vis = new D3Component(refElement.current, d3Props);
+      vis = new D3UsersGraph(refElement.current, d3Props);
     }
   }
 
@@ -56,7 +66,7 @@ export default function UsersGraphContainer() {
 
   return (
     <div className='react-world'>
-        <button onClick={update}>click me</button>
+        <button onClick={update}>Update</button>
         <div>{active}</div>
         <svg width={width} height={height} ref={refElement}></svg>
     </div>

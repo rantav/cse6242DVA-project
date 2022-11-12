@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import ForceGraph from './ForceGraph.js'
 
 export default class D3UsersGraph {
 
@@ -9,13 +10,26 @@ export default class D3UsersGraph {
   constructor(containerEl, props) {
     this.containerEl = containerEl;
     this.props = props;
-    const { width, height } = props;
+    const { data, width, height } = props;
     this.svg = d3.select(containerEl)
-    this.updateDatapoints();
+    // this.updateDatapoints();
+    this.chart = ForceGraph(data, {
+      svg: this.svg,
+      nodeId: d => d.id,
+      nodeGroup: d => d.group,
+      nodeTitle: d => `${d.id}\n${d.group}`,
+      linkStrokeWidth: l => Math.sqrt(l.value),
+      width,
+      height,
+      // invalidation // a promise to stop the simulation when the cell is re-run
+    })
   }
 
   updateDatapoints = () => {
     const { svg, props: { data, width, height } } = this;
+
+
+
     let s = svg.selectAll('circle').data(data)
     s.enter()
       .append('circle')
