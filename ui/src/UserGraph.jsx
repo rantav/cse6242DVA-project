@@ -1,13 +1,20 @@
 import React from "react";
 import * as d3 from "d3";
 
-
+// TODO: Delete
 class UserGraph extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [5, 10, 12, 33, 20, 10, 5, 3, 2, 1]
+    };
+  }
+
 
   buildGraph(data) {
     const width = 200,
-    scaleFactor = 10,
-    barHeight = 20;
+      scaleFactor = 10,
+      barHeight = 20;
 
     const graph = d3.select(this.ref)
       .attr("width", width)
@@ -37,12 +44,18 @@ class UserGraph extends React.Component {
 
   componentDidMount() {
     // activate
-    this.buildGraph([5, 10, 12, 33, 20, 10, 5, 3, 2, 1]);
+    this.buildGraph(this.state.data);
+  }
+
+  changeData() {
+    this.setState({data: [5, 10, 12, 33, 20, 10, 5, 3]})
+    this.buildGraph({data: [5, 10, 12, 33, 20, 10, 5, 3]})
   }
 
   render() {
     return (<div className="svg">
       <svg className="container" ref={(ref) => this.ref = ref} width='100' height='100'></svg>
+      <button onClick={() => {this.changeData()}}>Change data</button>
     </div>);
   }
 }
