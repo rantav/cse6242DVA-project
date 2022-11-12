@@ -84,21 +84,28 @@ export default function ForceGraph({
         .join("line");
 
     const node = svg.append("g")
-        .attr("fill", nodeFill)
-        .attr("stroke", nodeStroke)
-        .attr("stroke-opacity", nodeStrokeOpacity)
-        .attr("stroke-width", nodeStrokeWidth)
-        .selectAll("circle")
+        .selectAll("g.node")
         .data(nodes)
-        .join("circle")
-        .attr("r", nodeRadius)
+        .join("g")
+        .attr('class', 'node')
         .call(drag(simulation));
 
+    node.append('circle')
+        .attr("stroke-opacity", nodeStrokeOpacity)
+        .attr("stroke-width", nodeStrokeWidth)
+        .attr("stroke", nodeStroke)
+        .attr("fill", nodeFill)
+        .attr("r", nodeRadius)
 
     if (W) link.attr("stroke-width", ({ index: i }) => W[i]);
     if (L) link.attr("stroke", ({ index: i }) => L[i]);
-    if (G) node.attr("fill", ({ index: i }) => color(G[i]));
-    if (T) node.append("title").text(({ index: i }) => T[i]);
+    if (G) node.selectAll('circle').attr("fill", ({ index: i }) => color(G[i]));
+    if (T) {
+        node.append("title").text(({ index: i }) => T[i]);
+        node.append("text").text(({ index: i }) => T[i])
+            .attr('x', nodeRadius)
+            .attr('y', nodeRadius);
+    }
     if (invalidation != null) invalidation.then(() => simulation.stop());
 
     function intern(value) {
@@ -111,10 +118,8 @@ export default function ForceGraph({
             .attr("y1", d => d.source.y)
             .attr("x2", d => d.target.x)
             .attr("y2", d => d.target.y);
-
         node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
+            .attr("transform", d => `translate(${d.x}, ${d.y})`);
     }
 
     function drag(simulation) {

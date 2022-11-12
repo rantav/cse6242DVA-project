@@ -21,7 +21,8 @@ vite_local_server = 'http://localhost:5173/_vite/'
 def query():
     q = request.args.get('q')
     # return send_from_directory('data', 'mock-result.json')
-    return send_from_directory('data', 'mock-result-miserables.json')
+    # return send_from_directory('data', 'mock-result-miserables.json')
+    return send_from_directory('data', 'mock-results-nicer-format.json')
 
 
 # Authentication
