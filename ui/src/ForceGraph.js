@@ -67,6 +67,8 @@ export default function ForceGraph({
     if (!svg) {
         svg = d3.create("svg")
     }
+    svg.selectAll("*").remove();
+
     svg.attr("width", width)
         .attr("height", height)
         .attr("viewBox", [-width / 2, -height / 2, width, height])
@@ -91,6 +93,7 @@ export default function ForceGraph({
         .join("circle")
         .attr("r", nodeRadius)
         .call(drag(simulation));
+
 
     if (W) link.attr("stroke-width", ({ index: i }) => W[i]);
     if (L) link.attr("stroke", ({ index: i }) => L[i]);

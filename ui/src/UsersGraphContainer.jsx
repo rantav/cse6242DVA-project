@@ -24,12 +24,11 @@ export default function UsersGraphContainer() {
   }
 
   function update() {
-    // fetch("/query").then(response => {
-    //   response.json().then(data => {
+    fetch("/query").then(response => {
+      response.json().then(data => {
         setData(data)
-    //   })
-    // });
-    // Promise.resolve().then(() => setData(data));
+      })
+    });
   }
 
   function handleResizeEvent() {
