@@ -10,4 +10,4 @@ zipp==3.10.0
 GitHub-Flask==3.2.0
 requests==2.28.1
 pydantic==1.10.2
-
+ neo4j==5.2.0
