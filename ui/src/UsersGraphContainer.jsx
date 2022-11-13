@@ -8,12 +8,11 @@ export default function UsersGraphContainer() {
   const [userGraph, setUserGraph] = useState(null);
   const [width, setWidth] = useState(600);
   const [height, setHeight] = useState(600);
-  const [active, setActive] = useState(null);
   const refElement = useRef(null);
 
   useEffect(fetchData, []);
   useEffect(handleResizeEvent, []);
-  useEffect(initVis, [ data, userGraph ]);
+  useEffect(initVis, [ data ]);
   useEffect(updateVisOnResize, [ width, height ]);
 
   function fetchData() {
@@ -21,8 +20,8 @@ export default function UsersGraphContainer() {
     query = new URLSearchParams({q: query})
     const url = '/query?' + query;
     fetch(url).then(response => {
-      response.json().then(data => {
-        setData(data)
+      response.json().then(d => {
+        setData(d)
       })
     });
   }
@@ -38,7 +37,7 @@ export default function UsersGraphContainer() {
     const url = '/query?' + query;
     fetch(url).then(response => {
       response.json().then(newData => {
-        setData(data.concat(newData))
+        setData(oldData => newData.concat(oldData))
       })
     });
   }
@@ -66,7 +65,6 @@ export default function UsersGraphContainer() {
         data,
         width,
         height,
-        onDatapointClick: setActive,
         onNodeClick: (n) => expandNode(n),
       };
       if (userGraph) {
@@ -85,7 +83,6 @@ export default function UsersGraphContainer() {
   return (
     <div className='react-world'>
         <button onClick={fetchData}>reset</button>
-        <div>{active}</div>
         <svg width={width} height={height} ref={refElement}></svg>
     </div>
   );
