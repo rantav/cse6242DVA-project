@@ -3,6 +3,7 @@ from flask_github import GitHub
 import requests
 from users import Users, User
 import github
+from neo import Neo
 
 app = Flask(__name__, static_url_path="/", static_folder="vite/dist")
 
@@ -13,17 +14,24 @@ app.config['GITHUB_CLIENT_SECRET'] = gh_config.client_secret
 github_flask = GitHub(app)
 users = Users()
 
+neo = Neo()
+
 ui = 'ui/dist/'
 vite_local_server = 'http://localhost:5173/_vite/'
 
 # Query
-@app.route('/query')
-def query():
+@app.route('/query_mock')
+def query_mock():
     q = request.args.get('q')
     # return send_from_directory('data', 'mock-result.json')
     # return send_from_directory('data', 'mock-result-miserables.json')
     return send_from_directory('data', 'mock-results-nicer-format.json')
 
+@app.route('/query')
+def query():
+    q = request.args.get('q')
+    r = neo.query('MATCH (p:Person)-[d:DIRECTED]-(m:Movie) where m.released > 2000 RETURN p,d,m')
+    return r.data
 
 # Authentication
 @app.route('/login')
