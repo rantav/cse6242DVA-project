@@ -16,7 +16,10 @@ export default function UsersGraphContainer() {
   useEffect(updateVisOnResize, [ width, height ]);
 
   function fetchData() {
-    fetch("/query").then(response => {
+    let query = 'MATCH (p:Person)-[d:DIRECTED]-(m:Movie) where m.released > 2000 RETURN p,d,m';
+    query = new URLSearchParams({q: query})
+    const url = '/query?' + query;
+    fetch(url).then(response => {
       response.json().then(data => {
         setData(data)
       })

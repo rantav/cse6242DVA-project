@@ -30,7 +30,7 @@ def query_mock():
 @app.route('/query')
 def query():
     q = request.args.get('q')
-    r = neo.query('MATCH (p:Person)-[d:DIRECTED]-(m:Movie) where m.released > 2000 RETURN p,d,m')
+    r = neo.query(q)
     return r.data
 
 # Authentication
