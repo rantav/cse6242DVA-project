@@ -5,9 +5,9 @@ let vis;
 
 export default function UsersGraphContainer() {
   const [data, setData] = useState(null);
+  const [userGraph, setUserGraph] = useState(null);
   const [width, setWidth] = useState(600);
   const [height, setHeight] = useState(600);
-  const [active, setActive] = useState(null);
   const refElement = useRef(null);
 
   useEffect(fetchData, []);
@@ -20,19 +20,28 @@ export default function UsersGraphContainer() {
     query = new URLSearchParams({q: query})
     const url = '/query?' + query;
     fetch(url).then(response => {
-      response.json().then(data => {
-        setData(data)
+      response.json().then(d => {
+        setData(d)
       })
     });
   }
 
-  function update() {
-    fetch("/query").then(response => {
-      response.json().then(data => {
-        setData(data)
+  function expandNode(n) {
+    let query = '';
+    if (n.group == 'movie') {
+      query = `MATCH (m:Movie)-[d]-(p:Person) where m.title = "${n.id}" RETURN p,d,m`;
+    } else if (n.group == 'person') {
+      query = `MATCH (p:Person)-[d]-(m:Movie) where p.name = "${n.id}" RETURN p,d,m`;
+    }
+    query = new URLSearchParams({q: query})
+    const url = '/query?' + query;
+    fetch(url).then(response => {
+      response.json().then(newData => {
+        setData(oldData => newData.concat(oldData))
       })
     });
   }
+
 
   function handleResizeEvent() {
     let resizeTimer;
@@ -56,9 +65,14 @@ export default function UsersGraphContainer() {
         data,
         width,
         height,
-        onDatapointClick: setActive
+        onNodeClick: (n) => expandNode(n),
       };
-      vis = new D3UsersGraph(refElement.current, d3Props);
+      if (userGraph) {
+        userGraph.update(data);
+      } else {
+        let ug = new D3UsersGraph(refElement.current, d3Props);
+        setUserGraph(ug);
+      }
     }
   }
 
@@ -68,8 +82,7 @@ export default function UsersGraphContainer() {
 
   return (
     <div className='react-world'>
-        <button onClick={update}>Update</button>
-        <div>{active}</div>
+        <button onClick={fetchData}>reset</button>
         <svg width={width} height={height} ref={refElement}></svg>
     </div>
   );

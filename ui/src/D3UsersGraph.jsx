@@ -4,20 +4,19 @@ import ForceGraph from './ForceGraph.js'
 // Convert from neo4j format (mock-results-nicer-format.json) to D3 format
 function reshapeForD3(data) {
   // Type returned from the database now
-  const links = data.map((d, i) => {
+  let links = data.map((d) => {
     return {
-      id: i,
       source: d.d[0].name,
       target: d.d[2].title,
       type: d.d[1]
     }})
-  const nodes = data.map((d, i) => {
+  let nodes = data.map((d, i) => {
     return {
       id: d.d[0].name,
       name: d.d[0].name,
       group: 'person'
     }})
-    .concat(data.map((d, i) => {
+    .concat(data.map((d) => {
       return {
         id: d.d[2].title,
         name: d.d[2].title,
@@ -54,6 +53,14 @@ function reshapeForD3(data) {
   //     properties: n.properties,
   //     group: n.group,
   //     name: n.properties.name}})
+
+  // Unique the nodes
+  nodes = [...new Map(nodes.map(
+    item => [item['id'], item])
+    ).values()]
+  links = [...new Map(links.map(
+    item => [`${item['source']}-${item['target']}-${item['type']}`, item])
+    ).values()]
   return {nodes, links}
 
 }
@@ -68,46 +75,28 @@ export default class D3UsersGraph {
   constructor(containerEl, props) {
     this.containerEl = containerEl;
     this.props = props;
-    const { data, width, height } = props;
+    const { data, width, height, onNodeClick } = props;
     this.svg = d3.select(containerEl)
-    // this.updateDatapoints();
     const d = reshapeForD3(data);
-    this.chart = ForceGraph(d, {
+    this.chart = ForceGraph({
       svg: this.svg,
       nodeId: d => d.id,
       nodeGroup: d => d.group,
       nodeTitle: d => d.name,
-      linkStrokeWidth: l => Math.sqrt(l.value),
+      linkStrokeWidth: 1,
       nodeRadius: 10,
       width,
       height,
+      onNodeClick,
       // invalidation // a promise to stop the simulation when the cell is re-run
-    })
+    });
+    this.chart.update(d)
   }
-  // updateDatapoints = () => {
-  //   const { svg, props: { data, width, height } } = this;
 
-
-
-  //   let s = svg.selectAll('circle').data(data)
-  //   s.enter()
-  //     .append('circle')
-  //     .style('fill', 'red')
-  //     .attr('cx', () => Math.random() * width)
-  //     .attr('cy', () => Math.random() * height)
-  //     .attr('r', 10)
-  //     .on('mouseup', (d, i, nodes) => {
-  //       // TODO: nodes is null. This still doesn't work
-  //       console.log(d, i, nodes)
-  //       this.setActiveDatapoint(d, nodes[i])
-  //     });
-  //   s.exit().remove()
-  // }
-
-  // setActiveDatapoint = (d, node) => {
-  //   d3.select(node).style('fill', 'yellow');
-  //   this.props.onDatapointClick(d);
-  // }
+  update = (data) => {
+    const d = reshapeForD3(data);
+    this.chart.update(d)
+  }
 
   // TODO: Resize still not working
   resize = (width, height) => {
