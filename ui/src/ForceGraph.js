@@ -133,7 +133,12 @@ export default function ForceGraph({
             const circle = node.append('circle')
                 .attr("stroke-opacity", nodeStrokeOpacity)
                 .attr("stroke-width", nodeStrokeWidth)
-                .attr("stroke", nodeStroke)
+                .attr("stroke", d => {
+                    if (d.active) {
+                        return '#0aa';
+                    }
+                    return nodeStroke;
+                })
                 .attr("fill", nodeFill)
                 .attr("r", nodeRadius);
             if (color) {
@@ -169,7 +174,11 @@ export default function ForceGraph({
 
 
             if (onNodeClick) {
-                node.on('click', (e, d) => onNodeClick(d))
+                node.on('click', (e, d) => {
+                    nodes.forEach(n => n.active = false);
+                    d.active = true;
+                    onNodeClick(d)
+                })
             }
         }
     });
