@@ -18,6 +18,8 @@ export default function ForceGraph({
     nodeStrokeOpacity = 1, // node stroke opacity
     nodeRadius = 5, // node radius, in pixels
     nodeStrength,
+    linkStrength,
+    linkDistance,
     linkSource = ({ source }) => source, // given d in links, returns a node identifier string
     linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
     linkStroke = "#999", // link stroke color
@@ -41,13 +43,6 @@ export default function ForceGraph({
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
 
-    const simulation = d3.forceSimulation()
-        .force("charge", d3.forceManyBody().strength(-200))
-        .force("link", d3.forceLink().id(nodeId).distance(100))
-        .force("x", d3.forceX())
-        .force("y", d3.forceY())
-        .on("tick", ticked);
-
     let link = svg.append("g")
         .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
         .attr("stroke-opacity", linkStrokeOpacity)
@@ -56,8 +51,21 @@ export default function ForceGraph({
         .selectAll("line");
 
 
-    let node = svg.append("g")
-        .selectAll("g.node")
+    let node = svg.append("g").selectAll("g.node")
+
+    // Construct the forces.
+    const forceNode = d3.forceManyBody();
+    const forceLink = d3.forceLink(link).id(nodeId);
+    if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
+    if (linkStrength !== undefined) forceLink.strength(linkStrength);
+    if (linkDistance !== undefined) forceLink.distance(linkDistance);
+
+    const simulation = d3.forceSimulation()
+        .force("charge", forceNode)
+        .force("link", forceLink)
+        .force("x", d3.forceX())
+        .force("y", d3.forceY())
+        .on("tick", ticked);
 
     function ticked() {
         node.attr("transform", d => `translate(${d.x}, ${d.y})`);
@@ -132,12 +140,12 @@ export default function ForceGraph({
                 circle.attr('fill', d => color(d.group))
             }
 
-            node.append("text").text(d => d.name)
+            node.append("text").text(d => nodeTitle(d))
                 .attr('x', nodeRadius)
                 .attr('y', nodeRadius);
 
             link = link
-                .data(links, d => `${d.source.id}\t${d.target.id}`)
+                .data(links, d => `${linkSource(d)}\t${linkTarget(d)}`)
                 .join("line");
 
             if (onNodeClick) {
