@@ -72,6 +72,17 @@ def user():
         return 'No user', 401
     return user.json()
 
+@app.route("/user/<login>")
+def user_by_login(login):
+    auth_token = None
+    user_code = request.cookies.get('user')
+    if user_code is not None:
+        user = users.get(user_code)
+        if user is not None:
+            auth_token = user.auth_token
+    user = github.get_user(login, auth_token)
+    return user.json()
+
 # UI
 @app.route("/")
 def index():

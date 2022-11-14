@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import D3UsersGraph from './D3UsersGraph';
 
-let vis;
-
-export default function UsersGraphContainer() {
+export default function UsersGraphContainer({setSelectedEntity}) {
   const [data, setData] = useState(null);
   const [userGraph, setUserGraph] = useState(null);
   const [width, setWidth] = useState(window.innerWidth);
-  const [height, setHeight] = useState(window.innerHeight);
+  const [height, setHeight] = useState(window.innerHeight - 500);
   const refElement = useRef(null);
 
   useEffect(fetchData, []);
@@ -46,7 +44,11 @@ export default function UsersGraphContainer() {
         data,
         width,
         height,
-        onNodeClick: (n) => expandNode(n),
+        onNodeClick: (n) => {
+          // setSelectedEntity(n);
+          setSelectedEntity({login: 'torvalds'}); // TODO: Replace this mock
+          expandNode(n);
+        },
       };
       if (userGraph) {
         userGraph.update(data);
@@ -58,7 +60,7 @@ export default function UsersGraphContainer() {
   }
 
   return (
-    <div className='react-world'>
+    <div>
         <button onClick={fetchData}>reset</button>
         <svg width={width} height={height} ref={refElement}></svg>
     </div>
