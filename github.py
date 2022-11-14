@@ -13,7 +13,7 @@ def get_config() -> Config:
     return Config(client_id=os.getenv('GITHUB_CLIENT_ID'), client_secret=os.getenv('GITHUB_CLIENT_SECRET'))
 
 def add_user_data(user: User):
-    user_data = get_user_data(user.auth_token)
+    user_data = get_current_user_data(user.auth_token)
     user.login = user_data['login']
     user.id = user_data['id']
     user.node_id = user_data['node_id']
@@ -27,7 +27,7 @@ def add_user_data(user: User):
     user.bio = user_data['bio']
 
 
-def get_user_data(access_token: str) -> User:
+def get_current_user_data(access_token: str) -> User:
     """Obtain the user data from github.
     Given the access token issued out by GitHub, this method should give back the
     user data
@@ -89,9 +89,34 @@ def get_user_data(access_token: str) -> User:
 
     resp = requests.get(url=url, headers=headers)
 
-    userData = resp.json()
+    user_data = resp.json()
 
-    return userData
+    return user_data
+
+def get_user(user_login: str, access_token: str) -> User:
+    headers = None
+    if access_token is not None:
+        access_token = 'token ' + access_token
+        headers = {"Authorization": access_token}
+
+    url = f'https://api.github.com/users/{user_login}'
+    resp = requests.get(url=url, headers=headers)
+
+    user_data = resp.json()
+    user = User(
+        login = user_data['login'],
+        id = user_data['id'],
+        node_id = user_data['node_id'],
+        avatar_url = user_data['avatar_url'],
+        url = user_data['url'],
+        html_url = user_data['html_url'],
+        name = user_data['name'],
+        company = user_data['company'],
+        email = user_data['email'],
+        location = user_data['location'],
+        bio = user_data['bio'])
+
+    return user
 
 
 def get_access_token(request_token: str, log: logging.Logger = None) -> str:

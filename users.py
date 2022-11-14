@@ -2,8 +2,8 @@ from typing import Optional
 from pydantic import BaseModel
 
 class User(BaseModel):
-    auth_code: str
-    auth_token: str
+    auth_code: Optional[str]
+    auth_token: Optional[str]
     login: Optional[str]
     id: Optional[str]
     node_id: Optional[str]

@@ -1,19 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import D3UsersGraph from './D3UsersGraph';
 
-let vis;
-
-export default function UsersGraphContainer() {
+export default function UsersGraphContainer({setSelectedEntity}) {
   const [data, setData] = useState(null);
   const [userGraph, setUserGraph] = useState(null);
-  const [width, setWidth] = useState(600);
-  const [height, setHeight] = useState(600);
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight - 500);
   const refElement = useRef(null);
 
   useEffect(fetchData, []);
-  useEffect(handleResizeEvent, []);
   useEffect(initVis, [ data ]);
-  useEffect(updateVisOnResize, [ width, height ]);
 
   function fetchData() {
     let query = 'MATCH (p:Person)-[d:DIRECTED]-(m:Movie) where m.released > 2000 RETURN p,d,m';
@@ -42,30 +38,17 @@ export default function UsersGraphContainer() {
     });
   }
 
-
-  function handleResizeEvent() {
-    let resizeTimer;
-    const handleResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function() {
-        setWidth(window.innerWidth);
-        setHeight(window.innerHeight);
-      }, 300);
-    };
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }
-
   function initVis() {
     if(data) {
       const d3Props = {
         data,
         width,
         height,
-        onNodeClick: (n) => expandNode(n),
+        onNodeClick: (n) => {
+          // setSelectedEntity(n);
+          setSelectedEntity({login: 'torvalds'}); // TODO: Replace this mock
+          expandNode(n);
+        },
       };
       if (userGraph) {
         userGraph.update(data);
@@ -76,12 +59,8 @@ export default function UsersGraphContainer() {
     }
   }
 
-  function updateVisOnResize() {
-    vis && vis.resize(width, height);
-  }
-
   return (
-    <div className='react-world'>
+    <div>
         <button onClick={fetchData}>reset</button>
         <svg width={width} height={height} ref={refElement}></svg>
     </div>
