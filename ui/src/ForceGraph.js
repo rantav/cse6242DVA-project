@@ -20,6 +20,7 @@ export default function ForceGraph({
     nodeStrength,
     linkStrength,
     linkDistance,
+    linkTitle,
     linkSource = ({ source }) => source, // given d in links, returns a node identifier string
     linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
     linkStroke = "#999", // link stroke color
@@ -43,13 +44,7 @@ export default function ForceGraph({
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
 
-    let link = svg.append("g")
-        .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
-        .attr("stroke-opacity", linkStrokeOpacity)
-        .attr("stroke-width", typeof linkStrokeWidth !== "function" ? linkStrokeWidth : null)
-        .attr("stroke-linecap", linkStrokeLinecap)
-        .selectAll("line");
-
+    let link = svg.append("g").selectAll("g.line");
 
     let node = svg.append("g").selectAll("g.node")
 
@@ -65,14 +60,19 @@ export default function ForceGraph({
         .force("link", forceLink)
         .force("x", d3.forceX())
         .force("y", d3.forceY())
+        .force('collide',d3.forceCollide().radius(nodeRadius * 3).iterations(2))
         .on("tick", ticked);
 
     function ticked() {
         node.attr("transform", d => `translate(${d.x}, ${d.y})`);
-        link.attr("x1", d => d.source.x)
+        link.selectAll('line')
+            .attr("x1", d => d.source.x)
             .attr("y1", d => d.source.y)
             .attr("x2", d => d.target.x)
             .attr("y2", d => d.target.y);
+        link.selectAll('text')
+            .attr("x", d => (d.source.x + (d.target.x - d.source.x) * 0.5))
+            .attr("y", d => (d.source.y + (d.target.y - d.source.y) * 0.5));
     }
 
     // Terminate the force layout when this cell re-runs.
@@ -130,7 +130,7 @@ export default function ForceGraph({
                 .data(nodes, nodeId)
                 .join("g").attr('class', 'node')
                 .call(drag(simulation));
-            let circle = node.append('circle')
+            const circle = node.append('circle')
                 .attr("stroke-opacity", nodeStrokeOpacity)
                 .attr("stroke-width", nodeStrokeWidth)
                 .attr("stroke", nodeStroke)
@@ -150,12 +150,23 @@ export default function ForceGraph({
 
             const text = node.append("text").text(nodeTitle)
                 .attr('y', nodeRadius)
+                // .attr('class', 'shadow')
                 .style("text-anchor", "middle");
             node.append("title").text(nodeTitle);
 
             link = link
                 .data(links, d => `${linkSource(d)}\t${linkTarget(d)}`)
-                .join("line");
+                .join("g").attr('class', 'link');
+            const line = link.append('line')
+                .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
+                .attr("stroke-opacity", linkStrokeOpacity)
+                .attr("stroke-width", typeof linkStrokeWidth !== "function" ? linkStrokeWidth : null)
+                .attr("stroke-linecap", linkStrokeLinecap)
+            const linkText = link.append("text")
+                .text(linkTitle)
+                .attr("dy", ".25em")
+                .attr("text-anchor", "middle");
+
 
             if (onNodeClick) {
                 node.on('click', (e, d) => onNodeClick(d))
