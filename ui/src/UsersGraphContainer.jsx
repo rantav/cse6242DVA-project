@@ -22,37 +22,29 @@ export default function UsersGraphContainer({setSelectedEntity}) {
       WHERE all(r IN relationships(path) WHERE r.roles IS NOT NULL)
       RETURN path`;
 
-    const query = new URLSearchParams({q})
-    const url = '/query?' + query;
-    fetch(url).then(response => {
-      response.json().then(d => {
+    fetchQuery(q)
+      .then(d => {
         d = reshapeGraphDataPath(d);
         setData(d)
-      })
-    });
+      });
   }
 
   function fetchInitData() {
-    let query = 'MATCH (p:Person)-[d:DIRECTED]-(m:Movie) where m.released > 2000 RETURN p,d,m';
-    query = new URLSearchParams({q: query})
-    const url = '/query?' + query;
-    fetch(url).then(response => {
-      response.json().then(d => {
+    let query = 'MATCH (p:Person)-[d:DIRECTED]-(m:Movie) where m.released > 2010 RETURN p,d,m';
+    fetchQuery(query)
+      .then(d => {
         d = reshapeGraphData(d);
         setData(d)
-      })
-    });
+      });
   }
 
-  // function fetchQuery(query) {
-  //   query = new URLSearchParams({q: query})
-  //   const url = '/query?' + query;
-  //   fetch(url).then(response => {
-  //     response.json().then(d => {
-  //       setData(d)
-  //     })
-  //   });
-  // }
+  // Fetch data from the server -> neo4j
+  // and return a promise of its json response
+  function fetchQuery(query) {
+    query = new URLSearchParams({q: query})
+    const url = '/query?' + query;
+    return fetch(url).then(response => response.json())
+  }
 
   function expandNode(n) {
     let query = '';
@@ -61,14 +53,11 @@ export default function UsersGraphContainer({setSelectedEntity}) {
     } else if (n.group == 'person') {
       query = `MATCH (p:Person)-[d]-(m:Movie) where p.name = "${n.id}" RETURN p,d,m`;
     }
-    query = new URLSearchParams({q: query})
-    const url = '/query?' + query;
-    fetch(url).then(response => {
-      response.json().then(newData => {
+    fetchQuery(query)
+      .then(newData => {
         newData = reshapeGraphData(newData);
         setData(oldData => mergeNodesLinks(newData, oldData))
-      })
-    });
+      });
   }
 
   function mergeNodesLinks(d1, d2) {
@@ -97,38 +86,6 @@ export default function UsersGraphContainer({setSelectedEntity}) {
           name: d.d[2].title,
           group: 'movie'
         }}))
-
-    // type returned from the mock file
-    // const links = d3.map(data, (d) => {
-    //   return {
-    //     id: d.d.identity,
-    //     source: d.d.start,
-    //     target: d.d.end,
-    //     type: d.d.type,
-    //     properties: d.d.properties
-    //   }});
-    // let nodes = d3.map(data, (d) => {
-    //   return {
-    //     id: d.p.identity,
-    //     labels: d.p.labels,
-    //     properties: d.p.properties,
-    //     group: 1,
-    //   }})
-    //   .concat(d3.map(data, (d) => {
-    //     return {
-    //       id: d.m.identity,
-    //       labels: d.m.labels,
-    //       properties: d.m.properties,
-    //       group: 2,
-    //     }}))
-    // nodes = d3.map(nodes, (n) => {
-    //   return {
-    //     id: n.id,
-    //     labels: n.labels,
-    //     properties: n.properties,
-    //     group: n.group,
-    //     name: n.properties.name}})
-
     return dedupNodesLinks({nodes, links})
   }
 
@@ -159,10 +116,17 @@ export default function UsersGraphContainer({setSelectedEntity}) {
   function dedupNodesLinks({nodes, links}) {
     nodes = [...new Map(nodes.map(
       item => [item['id'], item])
-      ).values()]
+      ).values()];
+
     links = [...new Map(links.map(
       item => [`${item['source']}-${item['target']}-${item['type']}`, item])
-      ).values()]
+      ).values()];
+    // const nodeI = {};
+    // nodes.forEach((n, i) => nodeI[n.id] = i);
+    // links = links.map(l => {return {source: nodeI[l.source], target: nodeI[l.target], type: l.type}});
+    // const nodeMap = {};
+    // nodes.forEach((n) => nodeMap[n.id] = n);
+    // links = links.map(l => {return {source: nodeMap[l.source], target: nodeMap[l.target], type: l.type}});
     return {nodes, links}
   }
 
@@ -174,7 +138,7 @@ export default function UsersGraphContainer({setSelectedEntity}) {
         height,
         onNodeClick: (n) => {
           // setSelectedEntity(n);
-          setSelectedEntity({login: 'torvalds'}); // TODO: Replace this mock
+          setSelectedEntity({login: 'torvalds'}); // TODO: Replace this mock with the line above
           expandNode(n);
         },
       };

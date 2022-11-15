@@ -44,9 +44,9 @@ export default function ForceGraph({
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
 
-    let link = svg.append("g").selectAll("g.line");
+    let link = svg.append("g").selectAll("g.link");
 
-    let node = svg.append("g").selectAll("g.node")
+    let node = svg.append("g").selectAll("g.node");
 
     // Construct the forces.
     const forceNode = d3.forceManyBody();
@@ -124,54 +124,57 @@ export default function ForceGraph({
 
             simulation.nodes(nodes);
             simulation.force("link").links(links);
-            simulation.alpha(1).restart();
+            simulation.alpha(0.01).restart();
 
             node = node
                 .data(nodes, nodeId)
-                .join("g").attr('class', 'node')
-                .call(drag(simulation));
-            const circle = node.append('circle')
-                .attr("stroke-opacity", nodeStrokeOpacity)
-                .attr("stroke-width", nodeStrokeWidth)
-                .attr("stroke", d => {
-                    if (d.active) {
-                        return '#0aa';
-                    }
-                    return nodeStroke;
-                })
-                .attr("fill", nodeFill)
-                .attr("r", nodeRadius);
-            if (color) {
-                circle.attr('fill', d => color(d.group))
-            }
+                .join(enter => enter.append("g").attr("class", "node")
+                    .call(drag(simulation))
+                    .call(node => node.append("circle")
+                        .attr("r", nodeRadius)
+                        .attr("stroke-opacity", nodeStrokeOpacity)
+                        .attr("stroke-width", nodeStrokeWidth)
+                        .attr("stroke", d => {
+                            if (d.active) {
+                                return '#0aa';
+                            }
+                            return nodeStroke;
+                        })
+                        .attr("fill", d => color ? color(nodeGroup(d)) : nodeFill)
+                    )
+                    .call(node => node.append("title").text(nodeId))
+                    .call(node => node.append("text").text(nodeTitle)
+                        .attr('y', nodeRadius)
+                        .style("text-anchor", "middle")
+                    )
+                    .call(node => node.append("svg:image")
+                        .attr('width', nodeRadius)
+                        .attr('height', nodeRadius)
+                        .attr('y', -nodeRadius / 2)
+                        .attr('x', -nodeRadius / 2)
+                        .attr("xlink:href", "https://avatars.githubusercontent.com/u/117686224?v=4") // TODO: Replace with true avatar
+                        .attr('clip-path', `inset(0% round ${Math.round(nodeRadius / 2)}px)`)
+                    )
+                );
 
-            const image = node.append("svg:image")
-                .attr('width', nodeRadius)
-                .attr('height', nodeRadius)
-                .attr('y', -nodeRadius / 2)
-                .attr('x', -nodeRadius / 2)
-                .attr("xlink:href", "https://avatars.githubusercontent.com/u/117686224?v=4") // TODO: Replace with true avatar
-                .attr('clip-path', `inset(0% round ${Math.round(nodeRadius / 2)}px)`);
-
-            const text = node.append("text").text(nodeTitle)
-                .attr('y', nodeRadius)
-                // .attr('class', 'shadow')
-                .style("text-anchor", "middle");
-            node.append("title").text(nodeTitle);
+            // link.selectAll('*').remove(); // TODO: Remove this line
 
             link = link
-                .data(links, d => `${linkSource(d)}\t${linkTarget(d)}`)
-                .join("g").attr('class', 'link');
-            const line = link.append('line')
-                .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
-                .attr("stroke-opacity", linkStrokeOpacity)
-                .attr("stroke-width", typeof linkStrokeWidth !== "function" ? linkStrokeWidth : null)
-                .attr("stroke-linecap", linkStrokeLinecap)
-            const linkText = link.append("text")
-                .text(linkTitle)
-                .attr("dy", ".25em")
-                .attr("text-anchor", "middle");
+                .data(links, d => [linkSource(d), linkTarget(d)])
+                .join(enter => enter.append("g").attr("class", "link")
+                    .call(node => node.append("line")
+                        .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
+                        .attr("stroke-opacity", linkStrokeOpacity)
+                        .attr("stroke-width", typeof linkStrokeWidth !== "function" ? linkStrokeWidth : null)
+                        .attr("stroke-linecap", linkStrokeLinecap)
+                    )
 
+                    // .call(node => node.append("text")
+                    //     .text(linkTitle)
+                    //     .attr("dy", ".25em")
+                    //     .attr("text-anchor", "middle")
+                    // )
+                );
 
             if (onNodeClick) {
                 node.on('click', (e, d) => {
