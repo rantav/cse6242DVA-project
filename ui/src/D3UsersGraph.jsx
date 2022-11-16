@@ -22,7 +22,7 @@ export default class D3UsersGraph {
       linkStrokeWidth: 1,
       nodeRadius: 20,
       nodeStroke: '#eee',
-      nodeStrength: -200,
+      nodeStrength: -500,
       linkDistance: 20,
       width,
       height,
