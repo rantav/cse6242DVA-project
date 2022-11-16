@@ -60,7 +60,8 @@ export default function ForceGraph({
         .force("link", forceLink)
         .force("x", d3.forceX())
         .force("y", d3.forceY())
-        .force('collide',d3.forceCollide().radius(nodeRadius * 3).iterations(2))
+        // .force("center", d3.forceCenter())
+        .force('collide',d3.forceCollide().radius(nodeRadius * 2).iterations(2))
         .on("tick", ticked);
 
     function ticked() {
@@ -134,12 +135,6 @@ export default function ForceGraph({
                         .attr("r", nodeRadius)
                         .attr("stroke-opacity", nodeStrokeOpacity)
                         .attr("stroke-width", nodeStrokeWidth)
-                        .attr("stroke", d => {
-                            if (d.active) {
-                                return '#0aa';
-                            }
-                            return nodeStroke;
-                        })
                         .attr("fill", d => color ? color(nodeGroup(d)) : nodeFill)
                     )
                     .call(node => node.append("title").text(nodeId))
@@ -154,6 +149,10 @@ export default function ForceGraph({
                         .attr('x', -nodeRadius / 2)
                         .attr("xlink:href", "https://avatars.githubusercontent.com/u/117686224?v=4") // TODO: Replace with true avatar
                         .attr('clip-path', `inset(0% round ${Math.round(nodeRadius / 2)}px)`)
+                    ),
+                    update => update.call(node => node.select('circle')
+                        .attr("stroke", d => {
+                        return d.active ? '#0aa' : nodeStroke})
                     )
                 );
 
