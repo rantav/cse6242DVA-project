@@ -156,8 +156,6 @@ export default function ForceGraph({
                     )
                 );
 
-            // link.selectAll('*').remove(); // TODO: Remove this line
-
             link = link
                 .data(links, d => [linkSource(d), linkTarget(d)])
                 .join(enter => enter.append("g").attr("class", "link")
@@ -167,12 +165,12 @@ export default function ForceGraph({
                         .attr("stroke-width", typeof linkStrokeWidth !== "function" ? linkStrokeWidth : null)
                         .attr("stroke-linecap", linkStrokeLinecap)
                     )
-
                     // .call(node => node.append("text")
                     //     .text(linkTitle)
                     //     .attr("dy", ".25em")
                     //     .attr("text-anchor", "middle")
                     // )
+                    , update => update.call(node => node.select('line')) // Why is that needed? no clear, but it fixes the dandling link bug...
                 );
 
             if (onNodeClick) {

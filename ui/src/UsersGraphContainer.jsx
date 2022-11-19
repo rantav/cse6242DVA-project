@@ -30,6 +30,7 @@ export default function UsersGraphContainer({setSelectedEntity}) {
   }
 
   function fetchInitData() {
+    // let query = 'MATCH (p:Person)-[d:DIRECTED]-(m:Movie) RETURN p,d,m';
     let query = 'MATCH (p:Person)-[d:DIRECTED]-(m:Movie) where m.released > 2010 RETURN p,d,m';
     fetchQuery(query)
       .then(d => {
