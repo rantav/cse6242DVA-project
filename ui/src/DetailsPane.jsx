@@ -31,7 +31,7 @@ export default function DetailsPane({ entity }) {
 
     if (user && user.name) {
         return (
-            <Container size="lg" bgColor="#eee">
+            <Container size="lg">
                 <Avatar name={user.name} src={user.avatar_url} />
                 <Text>{user.name}</Text>
                 <Text>{user.location}</Text>

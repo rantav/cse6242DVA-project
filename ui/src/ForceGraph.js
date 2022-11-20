@@ -38,18 +38,18 @@ export default function ForceGraph({
         svg = d3.create("svg")
     }
 
-    svg.attr("width", width)
-        .attr("height", height)
-        .attr("viewBox", [-width / 2, -height / 2, width, height])
-        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+    // svg.attr("width", width)
+    //     .attr("height", height)
+    //     .attr("viewBox", [-width / 2, -height / 2, width, height])
+    //     .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
 
-    let link = svg.append("g").selectAll("g.line");
+    let link = svg.append("g").selectAll("g.link");
 
-    let node = svg.append("g").selectAll("g.node")
+    let node = svg.append("g").selectAll("g.node");
 
     // Construct the forces.
-    const forceNode = d3.forceManyBody();
+    const forceNode = d3.forceManyBody(node);
     const forceLink = d3.forceLink(link).id(nodeId);
     if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
     if (linkStrength !== undefined) forceLink.strength(linkStrength);
@@ -58,9 +58,8 @@ export default function ForceGraph({
     const simulation = d3.forceSimulation()
         .force("charge", forceNode)
         .force("link", forceLink)
-        .force("x", d3.forceX())
-        .force("y", d3.forceY())
-        .force('collide',d3.forceCollide().radius(nodeRadius * 3).iterations(2))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force('collide',d3.forceCollide().radius(nodeRadius * 2).iterations(2))
         .on("tick", ticked);
 
     function ticked() {
@@ -124,54 +123,53 @@ export default function ForceGraph({
 
             simulation.nodes(nodes);
             simulation.force("link").links(links);
-            simulation.alpha(1).restart();
+            simulation.alpha(0.01).restart();
 
             node = node
                 .data(nodes, nodeId)
-                .join("g").attr('class', 'node')
-                .call(drag(simulation));
-            const circle = node.append('circle')
-                .attr("stroke-opacity", nodeStrokeOpacity)
-                .attr("stroke-width", nodeStrokeWidth)
-                .attr("stroke", d => {
-                    if (d.active) {
-                        return '#0aa';
-                    }
-                    return nodeStroke;
-                })
-                .attr("fill", nodeFill)
-                .attr("r", nodeRadius);
-            if (color) {
-                circle.attr('fill', d => color(d.group))
-            }
-
-            const image = node.append("svg:image")
-                .attr('width', nodeRadius)
-                .attr('height', nodeRadius)
-                .attr('y', -nodeRadius / 2)
-                .attr('x', -nodeRadius / 2)
-                .attr("xlink:href", "https://avatars.githubusercontent.com/u/117686224?v=4") // TODO: Replace with true avatar
-                .attr('clip-path', `inset(0% round ${Math.round(nodeRadius / 2)}px)`);
-
-            const text = node.append("text").text(nodeTitle)
-                .attr('y', nodeRadius)
-                // .attr('class', 'shadow')
-                .style("text-anchor", "middle");
-            node.append("title").text(nodeTitle);
+                .join(enter => enter.append("g").attr("class", "node")
+                    .call(drag(simulation))
+                    .call(node => node.append("circle")
+                        .attr("r", nodeRadius)
+                        .attr("stroke-opacity", nodeStrokeOpacity)
+                        .attr("stroke-width", nodeStrokeWidth)
+                        .attr("fill", d => color ? color(nodeGroup(d)) : nodeFill)
+                    )
+                    .call(node => node.append("title").text(nodeId))
+                    .call(node => node.append("text").text(nodeTitle)
+                        .attr('y', nodeRadius)
+                        .style("text-anchor", "middle")
+                    )
+                    .call(node => node.append("svg:image")
+                        .attr('width', nodeRadius)
+                        .attr('height', nodeRadius)
+                        .attr('y', -nodeRadius / 2)
+                        .attr('x', -nodeRadius / 2)
+                        .attr("xlink:href", "https://avatars.githubusercontent.com/u/117686224?v=4") // TODO: Replace with true avatar
+                        .attr('clip-path', `inset(0% round ${Math.round(nodeRadius / 2)}px)`)
+                    ),
+                    update => update.call(node => node.select('circle')
+                        .attr("stroke", d => {
+                        return d.active ? '#0aa' : nodeStroke})
+                    )
+                );
 
             link = link
-                .data(links, d => `${linkSource(d)}\t${linkTarget(d)}`)
-                .join("g").attr('class', 'link');
-            const line = link.append('line')
-                .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
-                .attr("stroke-opacity", linkStrokeOpacity)
-                .attr("stroke-width", typeof linkStrokeWidth !== "function" ? linkStrokeWidth : null)
-                .attr("stroke-linecap", linkStrokeLinecap)
-            const linkText = link.append("text")
-                .text(linkTitle)
-                .attr("dy", ".25em")
-                .attr("text-anchor", "middle");
-
+                .data(links, d => [linkSource(d), linkTarget(d)])
+                .join(enter => enter.append("g").attr("class", "link")
+                    .call(node => node.append("line")
+                        .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
+                        .attr("stroke-opacity", linkStrokeOpacity)
+                        .attr("stroke-width", typeof linkStrokeWidth !== "function" ? linkStrokeWidth : null)
+                        .attr("stroke-linecap", linkStrokeLinecap)
+                    )
+                    // .call(node => node.append("text")
+                    //     .text(linkTitle)
+                    //     .attr("dy", ".25em")
+                    //     .attr("text-anchor", "middle")
+                    // )
+                    , update => update.call(node => node.select('line')) // Why is that needed? no clear, but it fixes the dandling link bug...
+                );
 
             if (onNodeClick) {
                 node.on('click', (e, d) => {

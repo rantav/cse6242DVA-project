@@ -101,7 +101,6 @@ def get_user(user_login: str, access_token: str) -> User:
 
     url = f'https://api.github.com/users/{user_login}'
     resp = requests.get(url=url, headers=headers)
-
     user_data = resp.json()
     user = User(
         login = user_data['login'],
