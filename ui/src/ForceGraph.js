@@ -38,10 +38,10 @@ export default function ForceGraph({
         svg = d3.create("svg")
     }
 
-    svg.attr("width", width)
-        .attr("height", height)
-        .attr("viewBox", [-width / 2, -height / 2, width, height])
-        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+    // svg.attr("width", width)
+    //     .attr("height", height)
+    //     .attr("viewBox", [-width / 2, -height / 2, width, height])
+    //     .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
 
     let link = svg.append("g").selectAll("g.link");
@@ -49,7 +49,7 @@ export default function ForceGraph({
     let node = svg.append("g").selectAll("g.node");
 
     // Construct the forces.
-    const forceNode = d3.forceManyBody();
+    const forceNode = d3.forceManyBody(node);
     const forceLink = d3.forceLink(link).id(nodeId);
     if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
     if (linkStrength !== undefined) forceLink.strength(linkStrength);
@@ -58,9 +58,7 @@ export default function ForceGraph({
     const simulation = d3.forceSimulation()
         .force("charge", forceNode)
         .force("link", forceLink)
-        .force("x", d3.forceX())
-        .force("y", d3.forceY())
-        // .force("center", d3.forceCenter())
+        .force("center", d3.forceCenter(width / 2, height / 2))
         .force('collide',d3.forceCollide().radius(nodeRadius * 2).iterations(2))
         .on("tick", ticked);
 

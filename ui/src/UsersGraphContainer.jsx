@@ -8,11 +8,12 @@ import {
 export default function UsersGraphContainer({setSelectedEntity}) {
   const [data, setData] = useState(null);
   const [userGraph, setUserGraph] = useState(null);
-  const [width, setWidth] = useState(window.innerWidth);
-  const [height, setHeight] = useState(window.innerHeight - 500);
+  const [width, setWidth] = useState(800);
+  const [height, setHeight] = useState(800);
   const refElement = useRef(null);
 
-  useEffect(fetchInitData, []);
+  // useEffect(fetchInitData, []);
+  useEffect(shortestPath, []);
   useEffect(initVis, [ data ]);
 
   function shortestPath() {
@@ -122,12 +123,6 @@ export default function UsersGraphContainer({setSelectedEntity}) {
     links = [...new Map(links.map(
       item => [`${item['source']}-${item['target']}-${item['type']}`, item])
       ).values()];
-    // const nodeI = {};
-    // nodes.forEach((n, i) => nodeI[n.id] = i);
-    // links = links.map(l => {return {source: nodeI[l.source], target: nodeI[l.target], type: l.type}});
-    // const nodeMap = {};
-    // nodes.forEach((n) => nodeMap[n.id] = n);
-    // links = links.map(l => {return {source: nodeMap[l.source], target: nodeMap[l.target], type: l.type}});
     return {nodes, links}
   }
 
