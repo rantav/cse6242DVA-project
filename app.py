@@ -19,13 +19,13 @@ neo = Neo()
 ui = 'ui/dist/'
 vite_local_server = 'http://localhost:5173/_vite/'
 
-# Query
-@app.route('/query_mock')
-def query_mock():
-    q = request.args.get('q')
-    # return send_from_directory('data', 'mock-result.json')
-    # return send_from_directory('data', 'mock-result-miserables.json')
-    return send_from_directory('data', 'mock-results-nicer-format.json')
+# # Query
+# @app.route('/query_mock')
+# def query_mock():
+#     q = request.args.get('q')
+#     # return send_from_directory('data', 'mock-result.json')
+#     # return send_from_directory('data', 'mock-result-miserables.json')
+#     return send_from_directory('data', 'mock-results-nicer-format.json')
 
 @app.route('/query')
 def query():
@@ -119,4 +119,4 @@ def _proxy(path):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)

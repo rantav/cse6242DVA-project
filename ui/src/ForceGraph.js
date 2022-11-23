@@ -135,7 +135,7 @@ export default function ForceGraph({
                         .attr("stroke-width", nodeStrokeWidth)
                         .attr("fill", d => color ? color(nodeGroup(d)) : nodeFill)
                     )
-                    .call(node => node.append("title").text(nodeId))
+                    .call(node => node.append("title").text(nodeTitle))
                     .call(node => node.append("text").text(nodeTitle)
                         .attr('y', nodeRadius)
                         .style("text-anchor", "middle")
@@ -145,7 +145,7 @@ export default function ForceGraph({
                         .attr('height', nodeRadius)
                         .attr('y', -nodeRadius / 2)
                         .attr('x', -nodeRadius / 2)
-                        .attr("xlink:href", "https://avatars.githubusercontent.com/u/117686224?v=4") // TODO: Replace with true avatar
+                        .attr("xlink:href", d => d.avatar_url)
                         .attr('clip-path', `inset(0% round ${Math.round(nodeRadius / 2)}px)`)
                     ),
                     update => update.call(node => node.select('circle')
