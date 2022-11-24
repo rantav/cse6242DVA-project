@@ -12,16 +12,15 @@ export default function UsersGraphContainer({setSelectedEntity}) {
   const [height, setHeight] = useState(800);
   const refElement = useRef(null);
 
-  // useEffect(fetchInitData, []);
-  useEffect(shortestPath, []);
+  useEffect(fetchInitData, []);
+  // useEffect(shortestPath, []);
   useEffect(initVis, [ data ]);
 
   function shortestPath() {
-    const q = `MATCH (KevinB:Person {name: 'Kevin Bacon'} ),
-        (Al:Person {name: 'Al Pacino'}),
-        path = shortestPath((KevinB)-[:ACTED_IN*]-(Al))
-      WHERE all(r IN relationships(path) WHERE r.roles IS NOT NULL)
-      RETURN path`;
+    const q = `MATCH (start_actor:Actor1 {login: 'BlazinZzetti'} ),
+                     (end_actor:Actor1 {login: 'liren-a'}),
+              path = shortestPath((start_actor)-[*]-(end_actor))
+              RETURN path`;
 
     fetchQuery(q)
       .then(d => {
@@ -32,7 +31,7 @@ export default function UsersGraphContainer({setSelectedEntity}) {
 
   function fetchInitData() {
     // let query = 'MATCH (p:Person)-[d:DIRECTED]-(m:Movie) RETURN p,d,m';
-    let query = 'MATCH (p:Person)-[d:DIRECTED]-(m:Movie) where m.released > 2010 RETURN p,d,m';
+    let query = 'MATCH (p:Actor1)-[d]-(m:Repo1) RETURN p,d,m limit 10';
     fetchQuery(query)
       .then(d => {
         d = reshapeGraphData(d);
@@ -50,10 +49,10 @@ export default function UsersGraphContainer({setSelectedEntity}) {
 
   function expandNode(n) {
     let query = '';
-    if (n.group == 'movie') {
-      query = `MATCH (m:Movie)-[d]-(p:Person) where m.title = "${n.id}" RETURN p,d,m`;
-    } else if (n.group == 'person') {
-      query = `MATCH (p:Person)-[d]-(m:Movie) where p.name = "${n.id}" RETURN p,d,m`;
+    if (n.group == 'repo') {
+      query = `MATCH (m:Repo1)-[d]-(p:Actor1) where m.name = "${n.id}" RETURN p,d,m limit 10`;
+    } else if (n.group == 'actor') {
+      query = `MATCH (p:Actor1)-[d]-(m:Repo1) where p.login = "${n.id}" RETURN p,d,m limit 10`;
     }
     fetchQuery(query)
       .then(newData => {
@@ -72,29 +71,30 @@ export default function UsersGraphContainer({setSelectedEntity}) {
   function reshapeGraphData(data) {
     let links = data.map((d) => {
       return {
-        source: d.d[0].name,
-        target: d.d[2].title,
+        source: d.d[0].login,
+        target: d.d[2].name,
         type: d.d[1]
       }})
     let nodes = data.map((d, i) => {
       return {
-        id: d.d[0].name,
-        name: d.d[0].name,
-        group: 'person'
+        id: d.d[0].login,
+        name: d.d[0].login,
+        avatar_url: d.d[0].avatar_url,
+        group: 'actor'
       }})
       .concat(data.map((d) => {
         return {
-          id: d.d[2].title,
-          name: d.d[2].title,
-          group: 'movie'
+          id: d.d[2].name,
+          name: d.d[2].name,
+          group: 'repo'
         }}))
     return dedupNodesLinks({nodes, links})
   }
 
   function reshapeGraphDataPath(data) {
     const links = [], nodes = [];
-    const isPerson = (e) => !!e.name;
-    const getId = (e) => isPerson(e) ? e.name : e.title;
+    const isActor = (e) => !!e.login;
+    const getId = (e) => isActor(e) ? e.login : e.name;
     const p = data[0].path;
     for (let i = 0; i < p.length; i++) {
 
@@ -102,7 +102,7 @@ export default function UsersGraphContainer({setSelectedEntity}) {
             nodes.push({
                 name: getId(p[i]),
                 id: getId(p[i]),
-                group: isPerson(p[i]) ? 'person' : 'movie',
+                group: isActor(p[i]) ? 'actor' : 'repo',
             });
         } else {
             links.push({

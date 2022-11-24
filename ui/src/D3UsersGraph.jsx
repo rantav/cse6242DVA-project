@@ -17,7 +17,7 @@ export default class D3UsersGraph {
       svg: this.svg,
       nodeId: d => d.id,
       nodeGroup: d => d.group,
-      nodeTitle: d => d.name,
+      nodeTitle: d => d.name.length > 7 ? d.name.substr(0, 7) + '...' : d.name,
       linkTitle: d => d.type,
       linkStrokeWidth: 1,
       nodeRadius: 20,
