@@ -6,7 +6,7 @@ import DetailsPane from './DetailsPane'
 import { SimpleGrid, Box, Center, Text, Square, Flex } from '@chakra-ui/react'
 
 function App() {
-  const [entity, setEntity] = useState({login: 'rantav', type: 'user'});
+  const [entity, setEntity] = useState({login: null, type: 'user'});
 
   return (
     <div className="App">
