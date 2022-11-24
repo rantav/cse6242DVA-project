@@ -7,7 +7,7 @@ export default class TypeAheadDropDown extends React.Component {
         super(props);
         this.state = {
             suggestions: [],
-            text: ''
+            text: props.selected || '',
         }
     }
 

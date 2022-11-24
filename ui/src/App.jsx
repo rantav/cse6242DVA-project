@@ -3,7 +3,7 @@ import UsersGraphContainer from './UsersGraphContainer'
 import WithSubnavigation from './Nav'
 import './App.css'
 import DetailsPane from './DetailsPane'
-import { SimpleGrid, Box, Center, Text, Square, Flex } from '@chakra-ui/react'
+import { Box, Center,  Flex } from '@chakra-ui/react'
 
 function App() {
   const [entity, setEntity] = useState({login: null, type: 'user'});

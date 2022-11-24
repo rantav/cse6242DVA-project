@@ -13,7 +13,10 @@ export default function DetailsPane({ entity }) {
     let [loading, setLoading] = useState(false);
     useEffect(fetchData, [entity]);
 
+    // TODO: Support for repos
+    // TODO: add more data
     function fetchData() {
+        setUser(null);
         if (loading) {
             return
         }
