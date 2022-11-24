@@ -167,8 +167,16 @@ export default function UsersGraphContainer({setSelectedEntity}) {
         width,
         height,
         onNodeClick: (n) => {
-          // setSelectedEntity(n);
-          setSelectedEntity({login: 'torvalds'}); // TODO: Replace this mock with the line above
+          const entity = {
+            type: n.group,
+          }
+          if (n.group == 'actor') {
+            entity.login = n.id;
+          }
+          if (n.group == 'repo') {
+            entity.name = n.id;
+          }
+          setSelectedEntity(entity);
           expandNode(n);
         },
       };

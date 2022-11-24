@@ -13,7 +13,7 @@ function App() {
 
       <WithSubnavigation/>
       <Flex>
-        <Center w='100px'>
+        <Center w='150px'>
           <DetailsPane entity={entity}/>
         </Center>
         <Box flex='1'>
