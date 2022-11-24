@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import D3UsersGraph from './D3UsersGraph';
 import ActorTypeahead from './ActorTypeahead';
 import {
-  Button,
   Stack,
   Alert,
   AlertIcon,
@@ -207,13 +206,11 @@ export default function UsersGraphContainer({setSelectedEntity}) {
               </Alert>
             }
           </Collapse>
-          {/* <Button onClick={shortestPath}>Shortest Path Demo</Button> */}
-          {/* <Button onClick={fetchInitData}>Reset</Button> */}
           <FormControl>
             <FormLabel>Type GitHub usernames to search for connecting path</FormLabel>
-            <ActorTypeahead items={[]} onSelected={setStartNode}/>
+            <ActorTypeahead items={[startNode]} selected={startNode} onSelected={setStartNode}/>
           </FormControl>
-          <ActorTypeahead items={[]} onSelected={setEndNode}/>
+          <ActorTypeahead items={[endNode]} selected={endNode} onSelected={setEndNode}/>
         </Stack>
         <svg width={width} height={height} ref={refElement}></svg>
     </div>
