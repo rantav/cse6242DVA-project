@@ -1,36 +1,62 @@
 import React, { useState, useEffect, useRef } from 'react';
 import D3UsersGraph from './D3UsersGraph';
+import ActorTypeahead from './ActorTypeahead';
 import {
   Button,
-  Stack
+  Stack,
+  Alert,
+  AlertIcon,
+  Collapse,
+  FormControl,
+  FormLabel
 } from '@chakra-ui/react'
 
 export default function UsersGraphContainer({setSelectedEntity}) {
   const [data, setData] = useState(null);
   const [userGraph, setUserGraph] = useState(null);
+  const [startNode, setStartNode] = useState('BlazinZzetti');
+  const [endNode, setEndNode] = useState('brocjad');
   const [width, setWidth] = useState(800);
   const [height, setHeight] = useState(800);
+  const [infoMessage, setInfoMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showMessage, setShowMessage] = useState(false);
+
   const refElement = useRef(null);
 
-  useEffect(fetchInitData, []);
-  // useEffect(shortestPath, []);
+  // useEffect(fetchInitData, []);
+  useEffect(shortestPath, [startNode, endNode]);
   useEffect(initVis, [ data ]);
 
   function shortestPath() {
-    const q = `MATCH (start_actor:Actor1 {login: 'BlazinZzetti'} ),
-                     (end_actor:Actor1 {login: 'liren-a'}),
-              path = shortestPath((start_actor)-[*]-(end_actor))
-              RETURN path`;
-
-    fetchQuery(q)
-      .then(d => {
-        d = reshapeGraphDataPath(d);
-        setData(d)
-      });
+    if (startNode && endNode) {
+      const q = `MATCH (start_actor:Actor1 {login: '${startNode}'} ),
+                      (end_actor:Actor1 {login: '${endNode}'}),
+                path = shortestPath((start_actor)-[*]-(end_actor))
+                RETURN path`;
+      setErrorMessage(null);
+      setShowMessage(true);
+      setInfoMessage('Calculating shortest path...');
+      fetchQuery(q)
+        .then(d => {
+          setInfoMessage(null);
+          if (d.length == 0) {
+            setInfoMessage(null)
+            setErrorMessage(`No path found between ${startNode} and ${endNode}`);
+            return;
+          }
+          setInfoMessage(`Displaying shortest path between ${startNode} and ${endNode}`);
+          d = reshapeGraphDataPath(d);
+          setData(d)
+        });
+    }
+    setTimeout(() => {
+      setShowMessage(false);
+    }
+    , 3000);
   }
 
   function fetchInitData() {
-    // let query = 'MATCH (p:Person)-[d:DIRECTED]-(m:Movie) RETURN p,d,m';
     let query = 'MATCH (p:Actor1)-[d]-(m:Repo1) RETURN p,d,m limit 10';
     fetchQuery(query)
       .then(d => {
@@ -91,11 +117,11 @@ export default function UsersGraphContainer({setSelectedEntity}) {
     return dedupNodesLinks({nodes, links})
   }
 
-  function reshapeGraphDataPath(data) {
+  function reshapeGraphDataPath(d) {
     const links = [], nodes = [];
     const isActor = (e) => !!e.login;
     const getId = (e) => isActor(e) ? e.login : e.name;
-    const p = data[0].path;
+    const p = d[0].path;
     for (let i = 0; i < p.length; i++) {
 
         if(i % 2 == 0) {
@@ -126,6 +152,14 @@ export default function UsersGraphContainer({setSelectedEntity}) {
     return {nodes, links}
   }
 
+  function onStartNodeChange(v) {
+    setStartNode(v);
+  }
+
+  function onEndNodeChange(v) {
+    setEndNode(v);
+  }
+
   function initVis() {
     if(data) {
       const d3Props = {
@@ -149,9 +183,29 @@ export default function UsersGraphContainer({setSelectedEntity}) {
 
   return (
     <div>
-        <Stack spacing={4} direction='row' align='center'>
-          <Button onClick={shortestPath}>Shortest Path Demo</Button>
-          <Button onClick={fetchInitData}>Reset</Button>
+        <Stack spacing={2} width='80%'>
+          <Collapse in={showMessage} animateOpacity>
+
+            {errorMessage &&
+              <Alert status='error'>
+                <AlertIcon />
+                {errorMessage}
+              </Alert>
+            }
+            {infoMessage &&
+              <Alert status='info'>
+                <AlertIcon />
+                {infoMessage}
+              </Alert>
+            }
+          </Collapse>
+          {/* <Button onClick={shortestPath}>Shortest Path Demo</Button> */}
+          {/* <Button onClick={fetchInitData}>Reset</Button> */}
+          <FormControl>
+            <FormLabel>Type GitHub usernames to search for connecting path</FormLabel>
+            <ActorTypeahead items={[]} onSelected={setStartNode}/>
+          </FormControl>
+          <ActorTypeahead items={[]} onSelected={setEndNode}/>
         </Stack>
         <svg width={width} height={height} ref={refElement}></svg>
     </div>
