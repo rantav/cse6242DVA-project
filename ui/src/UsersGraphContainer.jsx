@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import D3UsersGraph from './D3UsersGraph';
 import ActorTypeahead from './ActorTypeahead';
+import DetailsPane from './DetailsPane'
 import {
   Stack,
   Alert,
   AlertIcon,
   Collapse,
   FormControl,
-  FormLabel
+  FormLabel,
+  HStack,
+  Box
 } from '@chakra-ui/react'
 
-export default function UsersGraphContainer({setSelectedEntity}) {
+export default function UsersGraphContainer() {
   const [data, setData] = useState(null);
   const [userGraph, setUserGraph] = useState(null);
   const [startNode, setStartNode] = useState('BlazinZzetti');
@@ -20,6 +23,7 @@ export default function UsersGraphContainer({setSelectedEntity}) {
   const [infoMessage, setInfoMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
+  const [entity, setEntity] = useState({login: null, type: 'user'});
 
   const refElement = useRef(null);
 
@@ -175,7 +179,7 @@ export default function UsersGraphContainer({setSelectedEntity}) {
           if (n.group == 'repo') {
             entity.name = n.id;
           }
-          setSelectedEntity(entity);
+          setEntity(entity);
           expandNode(n);
         },
       };
@@ -190,7 +194,7 @@ export default function UsersGraphContainer({setSelectedEntity}) {
 
   return (
     <div>
-        <Stack spacing={2} width='80%'>
+        <Stack spacing={2}>
           <Collapse in={showMessage} animateOpacity>
 
             {errorMessage &&
@@ -212,7 +216,16 @@ export default function UsersGraphContainer({setSelectedEntity}) {
           </FormControl>
           <ActorTypeahead items={[endNode]} selected={endNode} onSelected={setEndNode}/>
         </Stack>
-        <svg width={width} height={height} ref={refElement}></svg>
+
+        <HStack spacing='5px'>
+          <Box w='30%'>
+            <DetailsPane entity={entity}/>
+          </Box>
+          <Box>
+            <svg width={width} height={height} ref={refElement}></svg>
+          </Box>
+        </HStack>
+
     </div>
   );
 }
