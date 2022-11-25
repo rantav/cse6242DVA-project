@@ -56,4 +56,11 @@ export default function DetailsPane({ entity }) {
 
         );
     }
+    return (
+        <Card maxW='sm'>
+            <CardBody>
+                    {/* <Text>Select user to view details</Text> */}
+            </CardBody>
+        </Card>
+    );
 }
