@@ -77,21 +77,20 @@ export default function DetailsPane({ entity }) {
         return (
             <Card maxW='sm'>
                 <CardBody>
-                    <Stack mt='6' spacing='3'>
+                    <Stack mt='6' spacing='1'>
                         <Heading size='sm'>Repo <a href={repo.html_url}>{repo.full_name}</a></Heading>
-                        <Text fontSize='xs'><Badge>{repo.language}</Badge></Text>
+                        <Text fontSize='xs'><Badge colorScheme='purple'>{repo.language}</Badge></Text>
                         {repo.topics && repo.topics.map(
-                            (t) => <Text fontSize='xs' key={t}>{t}</Text>)
+                            (t) => <Text fontSize='xs' key={t}><Badge variant='outline' colorScheme='purple'>{t}</Badge></Text>)
                         }
                     </Stack>
                 </CardBody>
-                <Divider />
                 <CardFooter>
                     <Stack mt='6' spacing='1'>
                         <Text fontSize='sm'>{repo.description}</Text>
-                        <Text fontSize='sm'>Forks: {repo.forks_count}</Text>
-                        <Text fontSize='sm'>Watchers: {repo.watchers_count}</Text>
-                        <Text fontSize='sm'>Stars: {repo.stargazers_count}</Text>
+                        {repo.forks_count && <Text fontSize='sm'>{repo.forks_count} forks</Text>}
+                        {repo.watchers_count && <Text fontSize='sm'>{repo.watchers_count} watchers</Text>}
+                        {repo.stargazers_count && <Text fontSize='sm'>{repo.stargazers_count} stars</Text>}
                     </Stack>
                 </CardFooter>
             </Card>
