@@ -2,6 +2,7 @@ import logging
 import os
 import requests
 from pydantic import BaseModel
+from repos import Repo
 from users import User
 
 class Config(BaseModel):
@@ -117,6 +118,35 @@ def get_user(user_login: str, access_token: str) -> User:
 
     return user
 
+def get_repo(name: str, access_token: str) -> User:
+    headers = None
+    if access_token is not None:
+        access_token = 'token ' + access_token
+        headers = {"Authorization": access_token}
+
+    url = f'https://api.github.com/repos/{name}'
+    resp = requests.get(url=url, headers=headers)
+    repo_data = resp.json()
+    repo = Repo(
+        id = repo_data['id'],
+        node_id = repo_data['node_id'],
+        name = repo_data['name'],
+        full_name = repo_data['full_name'],
+        private = repo_data['private'],
+        html_url = repo_data['html_url'],
+        description = repo_data['description'],
+        fork = repo_data['fork'],
+        url = repo_data['url'],
+        language = repo_data['language'],
+        forks_count = repo_data['forks_count'],
+        stargazers_count = repo_data['stargazers_count'],
+        watchers_count = repo_data['watchers_count'],
+        topics = repo_data['topics'],
+        created_at = repo_data['created_at'],
+        updated_at = repo_data['updated_at'],
+    )
+
+    return repo
 
 def get_access_token(request_token: str, log: logging.Logger = None) -> str:
     """Obtain the request token from github.

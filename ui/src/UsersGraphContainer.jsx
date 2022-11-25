@@ -155,14 +155,6 @@ export default function UsersGraphContainer() {
     return {nodes, links}
   }
 
-  function onStartNodeChange(v) {
-    setStartNode(v);
-  }
-
-  function onEndNodeChange(v) {
-    setEndNode(v);
-  }
-
   function initVis() {
     if(data) {
       const d3Props = {
@@ -196,7 +188,6 @@ export default function UsersGraphContainer() {
     <div>
         <Stack spacing={2}>
           <Collapse in={showMessage} animateOpacity>
-
             {errorMessage &&
               <Alert status='error'>
                 <AlertIcon />
@@ -218,7 +209,7 @@ export default function UsersGraphContainer() {
         </Stack>
 
         <HStack spacing='5px'>
-          <Box w='30%'>
+          <Box w='150px'>
             <DetailsPane entity={entity}/>
           </Box>
           <Box>

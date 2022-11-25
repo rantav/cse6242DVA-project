@@ -4,17 +4,17 @@ import {
     Text,
     Stack,
     Heading,
-    Divider
+    Divider,
+    Badge
 } from '@chakra-ui/react'
 import { Card, CardBody, CardFooter } from '@chakra-ui/card'
 
 export default function DetailsPane({ entity }) {
-    let [user, setUser] = useState({});
+    let [user, setUser] = useState(null);
+    let [repo, setRepo] = useState(null);
     let [loading, setLoading] = useState(false);
     useEffect(fetchData, [entity]);
 
-    // TODO: Support for repos
-    // TODO: add more data
     function fetchData() {
         setUser(null);
         if (loading) {
@@ -22,11 +22,26 @@ export default function DetailsPane({ entity }) {
         }
         if (entity.type == 'actor') {
             setLoading(true);
+            setRepo(null);
             const url = `/user/${entity.login}`;
             fetch(url)
                 .then((response) => response.json())
                 .then((d) => {
                     setUser(d)
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setLoading(false);
+                });
+        } else if (entity.type == 'repo') {
+            setLoading(true);
+            setUser(null);
+            const url = `/repo/${entity.name}`;
+            fetch(url)
+                .then((response) => response.json())
+                .then((d) => {
+                    setRepo(d)
                     setLoading(false);
                 })
                 .catch((error) => {
@@ -43,14 +58,41 @@ export default function DetailsPane({ entity }) {
                 <CardBody>
                     <Avatar name={user.name} src={user.avatar_url} />
                     <Stack mt='6' spacing='3'>
-                        <Heading size='md'>{user.name}</Heading>
+                        <Heading size='sm'><a href={user.html_url}>{user.name}</a></Heading>
+                        <Text fontSize='xs'>{user.location}</Text>
                     </Stack>
                 </CardBody>
                 <Divider />
                 <CardFooter>
-                    <Text>
-                        {user.location}
-                    </Text>
+                    <Stack mt='6' spacing='1'>
+                        <Text>{user.company}</Text>
+                        <Text fontSize='sm'>{user.bio}</Text>
+                    </Stack>
+                </CardFooter>
+            </Card>
+
+        );
+    }
+    if (repo && repo.name) {
+        return (
+            <Card maxW='sm'>
+                <CardBody>
+                    <Stack mt='6' spacing='3'>
+                        <Heading size='sm'>Repo <a href={repo.html_url}>{repo.full_name}</a></Heading>
+                        <Text fontSize='xs'><Badge>{repo.language}</Badge></Text>
+                        {repo.topics && repo.topics.map(
+                            (t) => <Text fontSize='xs' key={t}>{t}</Text>)
+                        }
+                    </Stack>
+                </CardBody>
+                <Divider />
+                <CardFooter>
+                    <Stack mt='6' spacing='1'>
+                        <Text fontSize='sm'>{repo.description}</Text>
+                        <Text fontSize='sm'>Forks: {repo.forks_count}</Text>
+                        <Text fontSize='sm'>Watchers: {repo.watchers_count}</Text>
+                        <Text fontSize='sm'>Stars: {repo.stargazers_count}</Text>
+                    </Stack>
                 </CardFooter>
             </Card>
 

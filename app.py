@@ -19,14 +19,6 @@ neo = Neo()
 ui = 'ui/dist/'
 vite_local_server = 'http://localhost:5173/_vite/'
 
-# # Query
-# @app.route('/query_mock')
-# def query_mock():
-#     q = request.args.get('q')
-#     # return send_from_directory('data', 'mock-result.json')
-#     # return send_from_directory('data', 'mock-result-miserables.json')
-#     return send_from_directory('data', 'mock-results-nicer-format.json')
-
 @app.route('/query')
 def query():
     q = request.args.get('q')
@@ -82,6 +74,17 @@ def user_by_login(login):
             auth_token = user.auth_token
     user = github.get_user(login, auth_token)
     return user.json()
+
+@app.route("/repo/<path:name>")
+def get_repo(name):
+    auth_token = None
+    user_code = request.cookies.get('user')
+    if user_code is not None:
+        user = users.get(user_code)
+        if user is not None:
+            auth_token = user.auth_token
+    repo = github.get_repo(name, auth_token)
+    return repo.json()
 
 # UI
 @app.route("/")
