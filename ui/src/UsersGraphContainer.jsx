@@ -80,9 +80,9 @@ export default function UsersGraphContainer() {
   function expandNode(n) {
     let query = '';
     if (n.group == 'repo') {
-      query = `MATCH (m:Repo1)-[d]-(p:Actor1) where m.name = "${n.id}" RETURN p,d,m limit 10`;
+      query = `MATCH (m:Repo1)-[d]-(p:Actor1) where m.name = "${n.id}" RETURN p,d,m limit 50`;
     } else if (n.group == 'actor') {
-      query = `MATCH (p:Actor1)-[d]-(m:Repo1) where p.login = "${n.id}" RETURN p,d,m limit 10`;
+      query = `MATCH (p:Actor1)-[d]-(m:Repo1) where p.login = "${n.id}" RETURN p,d,m limit 50`;
     }
     fetchQuery(query)
       .then(newData => {
