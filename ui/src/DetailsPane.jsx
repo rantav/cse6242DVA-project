@@ -23,6 +23,7 @@ export default function DetailsPane({ entity }) {
         if (entity.type == 'actor') {
             setLoading(true);
             setRepo(null);
+            setUser(entity);
             const url = `/user/${entity.login}`;
             fetch(url)
                 .then((response) => response.json())
@@ -37,6 +38,7 @@ export default function DetailsPane({ entity }) {
         } else if (entity.type == 'repo') {
             setLoading(true);
             setUser(null);
+            setRepo({full_name: entity.name});
             const url = `/repo/${entity.name}`;
             fetch(url)
                 .then((response) => response.json())
@@ -51,14 +53,13 @@ export default function DetailsPane({ entity }) {
         }
     }
 
-
-    if (user && user.name) {
+    if (user) {
         return (
             <Card maxW='sm'>
                 <CardBody>
-                    <Avatar name={user.name} src={user.avatar_url} />
+                    <Avatar name={user.name || user.login} src={user.avatar_url} />
                     <Stack mt='6' spacing='3'>
-                        <Heading size='sm'><a href={user.html_url}>{user.name}</a></Heading>
+                        <Heading size='sm'>User <a href={user.html_url}>{user.name || user.login}</a></Heading>
                         <Text fontSize='xs'>{user.location}</Text>
                     </Stack>
                 </CardBody>
@@ -73,7 +74,7 @@ export default function DetailsPane({ entity }) {
 
         );
     }
-    if (repo && repo.name) {
+    if (repo) {
         return (
             <Card maxW='sm'>
                 <CardBody>
