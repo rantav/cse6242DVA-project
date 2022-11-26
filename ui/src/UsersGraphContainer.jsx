@@ -10,7 +10,8 @@ import {
   FormControl,
   FormLabel,
   HStack,
-  Box
+  Box,
+  Tooltip
 } from '@chakra-ui/react'
 
 export default function UsersGraphContainer() {
@@ -201,11 +202,17 @@ export default function UsersGraphContainer() {
               </Alert>
             }
           </Collapse>
-          <FormControl>
-            <FormLabel>Type GitHub usernames to search for connecting path</FormLabel>
-            <ActorTypeahead items={[startNode]} selected={startNode} onSelected={setStartNode}/>
-          </FormControl>
-          <ActorTypeahead items={[endNode]} selected={endNode} onSelected={setEndNode}/>
+          <Tooltip label="GitHub username for shortest-path start" aria-label='A tooltip'>
+            <FormControl>
+              <FormLabel>Type GitHub usernames to search for connecting path</FormLabel>
+                <ActorTypeahead items={[startNode]} selected={startNode} onSelected={setStartNode}/>
+            </FormControl>
+          </Tooltip>
+          <Tooltip label="GitHub username for shortest-path end" aria-label='A tooltip'>
+            <FormControl>
+              <ActorTypeahead items={[endNode]} selected={endNode} onSelected={setEndNode}/>
+            </FormControl>
+          </Tooltip>
         </Stack>
 
         <HStack spacing='5px'>

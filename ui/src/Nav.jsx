@@ -3,7 +3,7 @@ import {
   Box,
   Flex,
   Text,
-  IconButton,
+  Tooltip,
   Button,
   Stack,
   Collapse,
@@ -132,17 +132,19 @@ export default function WithSubnavigation() {
             </Menu>
           }
           {!user &&
-            <Button
-              fontSize={'sm'}
-              fontWeight={600}>
-              <GitHubLogin
-                onSuccess={onLoginSuccess}
-                onFailure={onFailure}
-                scope='user:email'
-                clientId={import.meta.env.VITE_GH_CLIENT_ID}>
-                Sign in with GitHub
-              </GitHubLogin>
-            </Button>
+          <Tooltip label="GitHub login is optional, for extra API quota" aria-label='A tooltip'>
+              <Button
+                fontSize={'sm'}
+                fontWeight={600}>
+                <GitHubLogin
+                  onSuccess={onLoginSuccess}
+                  onFailure={onFailure}
+                  scope='user:email'
+                  clientId={import.meta.env.VITE_GH_CLIENT_ID}>
+                  Sign in with GitHub
+                </GitHubLogin>
+              </Button>
+            </Tooltip>
           }
         </Stack>
       </Flex>
