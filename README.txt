@@ -23,7 +23,11 @@ results in one API call to GitHub and when not logged in the quota runs out quic
 
 INSTALLATION
 No need to install. Visit our online web demo at https://gh-explorer-081.herokuapp.com/
+
 If you do want to run it locally (no need to, use the online demo) then you can install using `make install`
+Prerequisite to that are Python 3 (named `python3`) and Node.js v18.9.0 named `node`.
+Another requirement is to install the heroku CLI (https://devcenter.heroku.com/articles/heroku-cli)
+(`brew tap heroku/brew && brew install heroku`)
 
 EXECUTION
 No need to execute. Visit our online web demo at https://gh-explorer-081.herokuapp.com/

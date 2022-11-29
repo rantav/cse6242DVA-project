@@ -24,9 +24,9 @@ deploy:
 	git push heroku $$(git rev-parse --abbrev-ref HEAD):master
 
 be:
-	@echo "Visit http://127.0.0.1:5000/_vite/"
+	@echo "Visit http://127.0.0.1:5001/_vite/"
 	source .venv/bin/activate && \
-		FLASK_DEBUG=1 flask run
+		heroku local -p 5001
 ui:
 	@cd ui; npm run dev
 
