@@ -17,8 +17,8 @@ import {
 export default function UsersGraphContainer() {
   const [data, setData] = useState(null);
   const [userGraph, setUserGraph] = useState(null);
-  const [startNode, setStartNode] = useState('BlazinZzetti');
-  const [endNode, setEndNode] = useState('brocjad');
+  const [startNode, setStartNode] = useState('lunny');
+  const [endNode, setEndNode] = useState('realaravinth');
   const [width, setWidth] = useState(800);
   const [height, setHeight] = useState(800);
   const [infoMessage, setInfoMessage] = useState(null);

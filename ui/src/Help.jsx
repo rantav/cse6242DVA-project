@@ -25,6 +25,13 @@ function Help() {
                     <p><strong>Search</strong> for two GH users using the two text boxes to find the shortest path between.</p>
                     <p><strong>Click</strong> on a node to see more details on the side panel and expand it one level to its neighbours.</p>
                     <p>Optionally sign in to GitHub to allow more API calls for the side panel.</p>
+                    <p>A few suggested search couples (start, end)</p>
+                    <ul>
+                        <li><code>tituspijean</code>, <code>ericgaspar</code></li>
+                        <li><code>Huevos</code>, <code>nickersk</code></li>
+                        <li><code>wxiaoguang</code>, <code>realaravinth</code></li>
+                        <li><code>atvcaptain</code>, <code>ericgaspar</code></li>
+                    </ul>
                 </AccordionPanel>
             </AccordionItem>
         </Accordion>
