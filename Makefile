@@ -33,5 +33,8 @@ ui:
 ui-preview:
 	@cd ui; npm run build && npm run preview
 
+submit:
+	@echo "Creating a submission package..."
+	bash submit.sh
 
 .PHONY: ui be
