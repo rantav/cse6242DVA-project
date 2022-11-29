@@ -11,3 +11,5 @@ node_modules
 .venv/
 __pycache__
 .aws/config
+submission/
+team081final.zip

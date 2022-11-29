@@ -29,8 +29,8 @@ function Help() {
                     <ul>
                         <li><code>tituspijean</code>, <code>ericgaspar</code></li>
                         <li><code>Huevos</code>, <code>nickersk</code></li>
+                        <li><code>Huevos</code>, <code>hd75hd</code></li>
                         <li><code>wxiaoguang</code>, <code>realaravinth</code></li>
-                        <li><code>atvcaptain</code>, <code>ericgaspar</code></li>
                     </ul>
                 </AccordionPanel>
             </AccordionItem>
