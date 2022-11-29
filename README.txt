@@ -1,20 +1,31 @@
-https://docs.google.com/document/d/e/2PACX-1vTL8p8euifAho6K6PSE_b63A1HTucl3GCyLJSvjGq7ySnncqTnFa8azPNoMpzG9Wx38p4jPzxaC3OZg/pub#h.z11rqsgxo2dh
+DESCRIPTION
+This project collects and analyses GitHub user activity.
+We collect the logs of actions performed on GitHub (such as push events) and create an implicit
+social network from them, whereby an edge (connection) is defined as users' co-activity on the same repo.
 
+In CODE directory you'd find the frontend (ui) comprising of a React and D3 app,
+the backend (be) comprising of a Python Flask app serving the data from the Neo4J database,
+or GitHub's API.
 
-README.txt - a concise, short README.txt file, corresponding to the "user guide". This file should contain:
+Using the app:
+After opening the web UI, you see the shortest path for two default users.
+You may now click on any of the nodes in the graph in order to expand it (see more neighbors) and its
+details in the side pane.
+You may keep on clicking other nodes to expand them.
+You may also select two other users in order to view the shortest GitHub path between them.
+Keep in mind that the data collected is only for a short term of time due to its size therefore
+not all GitHub users are found in the database.
+Click the Help section at the bottom of the page for more options.
 
-DESCRIPTION - Describe the package in a few paragraphs
+GitHub login is optional. If logged in, we use your GitHub token in order to get more API calls,
+these are used for the sake of populating the sidebar. If you keep on clicking nodes, each click
+results in one API call to GitHub and when not logged in the quota runs out quickly.
 
-INSTALLATION - How to install and setup your code
+INSTALLATION
+No need to install. Visit our online web demo at https://gh-explorer-081.herokuapp.com/
+If you do want to run it locally (no need to, use the online demo) then you can install using `make install`
 
-EXECUTION - How to run a demo on your code
-
-DEMO VIDEO - [Optional, but recommended]
-Include the URL of a 1-minute *unlisted* YouTube video in this txt file. The video would show how to install and execute your system/tool/approach (e.g, from typing the first command to compile, to system launching, and running some examples). Feel free to speed up the video if needed (e.g., remove less relevant video segments). This video is optional (i.e., submitting a video does not increase scores; not submitting one does not decrease scores). However, we recommend teams to try and create such a video, because making the video helps teams better think through what they may want to write in the README.txt, and generally how they want to "sell" their work.
-
-
-TODO: Directories to create for submission
-DOC - a folder called DOC (short for “documentation”) containing:
-teamXXXreport.pdf - Your report writeup in PDF format; can be created using any software, e.g., latex, Word.
-teamXXXposter.pdf - Your final poster.
-CODE - All your code should be added here. Make sure that your package includes only the absolutely necessary set of files.
+EXECUTION
+No need to execute. Visit our online web demo at https://gh-explorer-081.herokuapp.com/
+If you do want to run it locally (no need to) then you can run using `make ui` in one terminal window
+and `make be` in another terminal window. Then open http://127.0.0.1:5001/_vite/

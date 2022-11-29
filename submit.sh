@@ -15,6 +15,8 @@ cp requirements.txt submission/CODE/
 cp Makefile submission/CODE/
 cp Procfile submission/CODE/
 
+cp README.txt submission/
+
 DOC - a folder called DOC (short for “documentation”) containing:
 team081report.pdf - Your report writeup in PDF format; can be created using any software, e.g., latex, Word.
 team081poster.pdf - Your final poster.
