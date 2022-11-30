@@ -133,6 +133,7 @@ export default function UsersGraphContainer() {
             nodes.push({
                 name: getId(p[i]),
                 id: getId(p[i]),
+                avatar_url: p[i].avatar_url,
                 group: isActor(p[i]) ? 'actor' : 'repo',
             });
         } else {
