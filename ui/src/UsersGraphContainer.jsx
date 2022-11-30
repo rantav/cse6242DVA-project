@@ -37,7 +37,7 @@ export default function UsersGraphContainer() {
       const q = `MATCH (start_actor:Actor1 {login: '${startNode}'} ),
                       (end_actor:Actor1 {login: '${endNode}'}),
                 path = shortestPath((start_actor)-[*]-(end_actor))
-                RETURN path`;
+                RETURN path, length(path)`;
       setErrorMessage(null);
       setShowMessage(true);
       setInfoMessage('Calculating shortest path...');
@@ -46,10 +46,11 @@ export default function UsersGraphContainer() {
           setInfoMessage(null);
           if (d.length == 0) {
             setInfoMessage(null)
-            setErrorMessage(`No path found between ${startNode} and ${endNode}`);
+            setErrorMessage(`No path found between <code>${startNode}</code> and <code>${endNode}</code>`);
             return;
           }
-          setInfoMessage(`Displaying shortest path between ${startNode} and ${endNode}`);
+          const pathLen = d[0]['length(path)'];
+          setInfoMessage(`Shortest path between <code>${startNode}</code> and <code>${endNode}</code> (length: <strong>${pathLen}</strong>)`);
           d = reshapeGraphDataPath(d);
           setData(d)
         });
@@ -192,13 +193,13 @@ export default function UsersGraphContainer() {
             {errorMessage &&
               <Alert status='error'>
                 <AlertIcon />
-                {errorMessage}
+                <span dangerouslySetInnerHTML={{ __html: errorMessage }} />
               </Alert>
             }
             {infoMessage &&
               <Alert status='info'>
                 <AlertIcon />
-                {infoMessage}
+                <span dangerouslySetInnerHTML={{ __html: infoMessage }} />
               </Alert>
             }
           </Collapse>

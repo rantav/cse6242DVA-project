@@ -33,3 +33,6 @@ EXECUTION
 No need to execute. Visit our online web demo at https://gh-explorer-081.herokuapp.com/
 If you do want to run it locally (no need to) then you can run using `make ui` in one terminal window
 and `make be` in another terminal window. Then open http://127.0.0.1:5001/_vite/
+
+DEMO VIDEO
+How to use and install https://youtu.be/7K_IUaUdJ7c
