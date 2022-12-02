@@ -20,9 +20,8 @@ cp README.txt submission/
 
 mkdir submission/DOC
 
-DOC - a folder called DOC (short for “documentation”) containing:
-team081report.pdf - Your report writeup in PDF format; can be created using any software, e.g., latex, Word.
-team081poster.pdf - Your final poster.
+cp doc/final/team081report.pdf submission/DOC/
+cp doc/final/team081poster.pdf submission/DOC/
 
 cd submission
 tree .
